@@ -131,15 +131,9 @@ type IMetadataProps = {
   onUpdate: () => void
 }
 
-type MetadataState = {
-  documentType?: DocType | ''
-  metadata: Record<string, string>
-}
-
 const Metadata: FC<IMetadataProps> = ({ docDetail, loading, onUpdate }) => {
   const { doc_metadata = {} } = docDetail || {}
-  const rawDocType = docDetail?.doc_type ?? ''
-  const doc_type = rawDocType === 'others' ? '' : rawDocType
+  const doc_type = docDetail?.doc_type || ''
 
   const { t } = useTranslation()
   const metadataMap = useMetadataMap()
@@ -149,16 +143,18 @@ const Metadata: FC<IMetadataProps> = ({ docDetail, loading, onUpdate }) => {
   const businessDocCategoryMap = useBusinessDocCategories()
   const [editStatus, setEditStatus] = useState(!doc_type) // if no documentType, in editing status by default
   // the initial values are according to the documentType
-  const [metadataParams, setMetadataParams] = useState<MetadataState>(
+  const [metadataParams, setMetadataParams] = useState<{
+    documentType?: DocType | ''
+    metadata: { [key: string]: string }
+  }>(
     doc_type
       ? {
-        documentType: doc_type as DocType,
-        metadata: (doc_metadata || {}) as Record<string, string>,
+        documentType: doc_type,
+        metadata: doc_metadata || {},
       }
-      : { metadata: {} },
-  )
+      : { metadata: {} })
   const [showDocTypes, setShowDocTypes] = useState(!doc_type) // whether show doc types
-  const [tempDocType, setTempDocType] = useState<DocType | ''>('') // for remember icon click
+  const [tempDocType, setTempDocType] = useState<DocType | undefined | ''>('') // for remember icon click
   const [saveLoading, setSaveLoading] = useState(false)
 
   const { notify } = useContext(ToastContext)
@@ -169,13 +165,13 @@ const Metadata: FC<IMetadataProps> = ({ docDetail, loading, onUpdate }) => {
     if (docDetail?.doc_type) {
       setEditStatus(false)
       setShowDocTypes(false)
-      setTempDocType(doc_type as DocType | '')
+      setTempDocType(docDetail?.doc_type)
       setMetadataParams({
-        documentType: doc_type as DocType | '',
-        metadata: (docDetail?.doc_metadata || {}) as Record<string, string>,
+        documentType: docDetail?.doc_type,
+        metadata: docDetail?.doc_metadata || {},
       })
     }
-  }, [docDetail?.doc_type, docDetail?.doc_metadata, doc_type])
+  }, [docDetail?.doc_type])
 
   // confirm doc type
   const confirmDocType = () => {
@@ -183,7 +179,7 @@ const Metadata: FC<IMetadataProps> = ({ docDetail, loading, onUpdate }) => {
       return
     setMetadataParams({
       documentType: tempDocType,
-      metadata: tempDocType === metadataParams.documentType ? metadataParams.metadata : {} as Record<string, string>, // change doc type, clear metadata
+      metadata: tempDocType === metadataParams.documentType ? metadataParams.metadata : {}, // change doc type, clear metadata
     })
     setEditStatus(true)
     setShowDocTypes(false)
@@ -191,7 +187,7 @@ const Metadata: FC<IMetadataProps> = ({ docDetail, loading, onUpdate }) => {
 
   // cancel doc type
   const cancelDocType = () => {
-    setTempDocType(metadataParams.documentType ?? '')
+    setTempDocType(metadataParams.documentType)
     setEditStatus(true)
     setShowDocTypes(false)
   }
@@ -213,7 +209,7 @@ const Metadata: FC<IMetadataProps> = ({ docDetail, loading, onUpdate }) => {
             <span className={s.title}>{t('datasetDocuments.metadata.docTypeChangeTitle')}</span>
             <span className={s.changeTip}>{t('datasetDocuments.metadata.docTypeSelectWarning')}</span>
           </>}
-          <Radio.Group value={tempDocType ?? documentType ?? ''} onChange={setTempDocType} className={s.radioGroup}>
+          <Radio.Group value={tempDocType ?? documentType} onChange={setTempDocType} className={s.radioGroup}>
             {CUSTOMIZABLE_DOC_TYPES.map((type, index) => {
               const currValue = tempDocType ?? documentType
               return <Radio key={index} value={type} className={`${s.radio} ${currValue === type ? 'shadow-none' : ''}`}>

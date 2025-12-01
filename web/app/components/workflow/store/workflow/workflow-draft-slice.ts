@@ -21,10 +21,6 @@ export type WorkflowDraftSliceShape = {
   setSyncWorkflowDraftHash: (hash: string) => void
   isSyncingWorkflowDraft: boolean
   setIsSyncingWorkflowDraft: (isSyncingWorkflowDraft: boolean) => void
-  isWorkflowDataLoaded: boolean
-  setIsWorkflowDataLoaded: (loaded: boolean) => void
-  nodes: Node[]
-  setNodes: (nodes: Node[]) => void
 }
 
 export const createWorkflowDraftSlice: StateCreator<WorkflowDraftSliceShape> = set => ({
@@ -37,8 +33,4 @@ export const createWorkflowDraftSlice: StateCreator<WorkflowDraftSliceShape> = s
   setSyncWorkflowDraftHash: syncWorkflowDraftHash => set(() => ({ syncWorkflowDraftHash })),
   isSyncingWorkflowDraft: false,
   setIsSyncingWorkflowDraft: isSyncingWorkflowDraft => set(() => ({ isSyncingWorkflowDraft })),
-  isWorkflowDataLoaded: false,
-  setIsWorkflowDataLoaded: loaded => set(() => ({ isWorkflowDataLoaded: loaded })),
-  nodes: [],
-  setNodes: nodes => set(() => ({ nodes })),
 })

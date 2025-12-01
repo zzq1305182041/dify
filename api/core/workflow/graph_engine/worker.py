@@ -16,6 +16,7 @@ from uuid import uuid4
 from flask import Flask
 from typing_extensions import override
 
+from core.workflow.enums import NodeType
 from core.workflow.graph import Graph
 from core.workflow.graph_events import GraphNodeEventBase, NodeRunFailedEvent
 from core.workflow.nodes.base.node import Node
@@ -107,8 +108,8 @@ class Worker(threading.Thread):
             except Exception as e:
                 error_event = NodeRunFailedEvent(
                     id=str(uuid4()),
-                    node_id=node.id,
-                    node_type=node.node_type,
+                    node_id="unknown",
+                    node_type=NodeType.CODE,
                     in_iteration_id=None,
                     error=str(e),
                     start_at=datetime.now(),

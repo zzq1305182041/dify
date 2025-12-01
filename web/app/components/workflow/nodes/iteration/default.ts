@@ -22,7 +22,6 @@ const nodeDefault: NodeDefault<IterationNodeType> = {
     is_parallel: false,
     parallel_nums: 10,
     error_handle_mode: ErrorHandleMode.Terminated,
-    flatten_output: true,
   },
   checkValid(payload: IterationNodeType, t: any) {
     let errorMessages = ''

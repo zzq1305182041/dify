@@ -40,15 +40,11 @@ export type CommonHooksFnMap = {
   handleBackupDraft: () => void
   handleLoadBackupDraft: () => void
   handleRestoreFromPublishedWorkflow: (...args: any[]) => void
-  handleRun: (params: any, callback?: IOtherOptions, options?: any) => void
+  handleRun: (params: any, callback?: IOtherOptions) => void
   handleStopRun: (...args: any[]) => void
   handleStartWorkflowRun: () => void
   handleWorkflowStartRunInWorkflow: () => void
   handleWorkflowStartRunInChatflow: () => void
-  handleWorkflowTriggerScheduleRunInWorkflow: (nodeId?: string) => void
-  handleWorkflowTriggerWebhookRunInWorkflow: (params: { nodeId: string }) => void
-  handleWorkflowTriggerPluginRunInWorkflow: (nodeId?: string) => void
-  handleWorkflowRunAllTriggersInWorkflow: (nodeIds: string[]) => void
   availableNodesMetaData?: AvailableNodesMetaData
   getWorkflowRunAndTraceUrl: (runId?: string) => { runUrl: string; traceUrl: string }
   exportCheck?: () => Promise<void>
@@ -91,10 +87,6 @@ export const createHooksStore = ({
   handleStartWorkflowRun = noop,
   handleWorkflowStartRunInWorkflow = noop,
   handleWorkflowStartRunInChatflow = noop,
-  handleWorkflowTriggerScheduleRunInWorkflow = noop,
-  handleWorkflowTriggerWebhookRunInWorkflow = noop,
-  handleWorkflowTriggerPluginRunInWorkflow = noop,
-  handleWorkflowRunAllTriggersInWorkflow = noop,
   availableNodesMetaData = {
     nodes: [],
   },
@@ -133,10 +125,6 @@ export const createHooksStore = ({
     handleStartWorkflowRun,
     handleWorkflowStartRunInWorkflow,
     handleWorkflowStartRunInChatflow,
-    handleWorkflowTriggerScheduleRunInWorkflow,
-    handleWorkflowTriggerWebhookRunInWorkflow,
-    handleWorkflowTriggerPluginRunInWorkflow,
-    handleWorkflowRunAllTriggersInWorkflow,
     availableNodesMetaData,
     getWorkflowRunAndTraceUrl,
     exportCheck,

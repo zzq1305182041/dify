@@ -164,7 +164,6 @@ class MessageService:
         elif not rating and not feedback:
             raise ValueError("rating cannot be None when feedback not exists")
         else:
-            assert rating is not None
             feedback = MessageFeedback(
                 app_id=app_model.id,
                 conversation_id=message.conversation_id,

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import SyncButton from './sync-button'
 
 const meta = {
-  title: 'Base/General/SyncButton',
+  title: 'Base/Button/SyncButton',
   component: SyncButton,
   parameters: {
     layout: 'centered',

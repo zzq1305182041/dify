@@ -120,7 +120,6 @@ const translation = {
     noAccount: 'Не маєте облікового запису?',
     welcome: '👋 Ласкаво просимо! Будь ласка, заповніть деталі, щоб почати.',
   },
-  pageTitleForE: 'Гей, давай почнемо!',
 }
 
 export default translation

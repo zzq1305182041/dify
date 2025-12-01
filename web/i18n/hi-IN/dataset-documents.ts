@@ -82,10 +82,6 @@ const translation = {
       ok: 'ठीक है',
     },
     learnMore: 'और जानो',
-    sort: {
-      uploadTime: 'अपलोड समय',
-      hitCount: 'पुनः प्राप्ति गणना',
-    },
   },
   metadata: {
     title: 'मेटाडेटा',

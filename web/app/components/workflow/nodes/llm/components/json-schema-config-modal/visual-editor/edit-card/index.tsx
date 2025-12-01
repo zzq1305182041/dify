@@ -122,8 +122,7 @@ const EditCard: FC<EditCardProps> = ({
   }, [emit, path, parentPath, fields, currentFields])
 
   const handlePropertyNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    // fix: when user add name contains space, the variable reference will not work
-    setCurrentFields(prev => ({ ...prev, name: e.target.value?.trim() }))
+    setCurrentFields(prev => ({ ...prev, name: e.target.value }))
   }, [])
 
   const handlePropertyNameBlur = useCallback(() => {

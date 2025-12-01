@@ -105,6 +105,8 @@ const translation = {
     dataSet: {
       title: 'Knowledge',
       noData: 'You can import Knowledge as context',
+      words: 'Words',
+      textBlocks: 'Text Blocks',
       selectTitle: 'Select reference Knowledge',
       selected: 'Knowledge selected',
       noDataSet: 'No Knowledge found',
@@ -344,6 +346,7 @@ const translation = {
   variableTable: {
     key: 'Variable Key',
     name: 'User Input Field Name',
+    optional: 'Optional',
     type: 'Input Type',
     action: 'Actions',
     typeString: 'String',

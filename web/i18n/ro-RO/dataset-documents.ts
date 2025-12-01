@@ -81,10 +81,6 @@ const translation = {
     },
     addUrl: 'Adăugați adresa URL',
     learnMore: 'Află mai multe',
-    sort: {
-      uploadTime: 'Timp de încărcare',
-      hitCount: 'Număr de recuperări',
-    },
   },
   metadata: {
     title: 'Metadate',

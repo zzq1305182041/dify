@@ -81,10 +81,6 @@ const translation = {
     },
     addUrl: 'Adicionar URL',
     learnMore: 'Saiba Mais',
-    sort: {
-      uploadTime: 'Hora do envio',
-      hitCount: 'Contagem de Recuperação',
-    },
   },
   metadata: {
     title: 'Metadados',

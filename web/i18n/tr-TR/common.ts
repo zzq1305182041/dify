@@ -65,12 +65,6 @@ const translation = {
     yes: 'Evet',
     deleteConfirmTitle: 'Silinsin mi?',
     confirmAction: 'Lütfen işleminizi onaylayın.',
-    noSearchResults: 'Hiç {{content}} bulunamadı',
-    resetKeywords: 'Anahtar kelimeleri sıfırla',
-    selectCount: '{{count}} Seçildi',
-    searchCount: '{{count}} {{content}} bul',
-    noSearchCount: '0 {{content}}',
-    now: 'Şimdi',
   },
   errorMsg: {
     fieldRequired: '{{field}} gereklidir',
@@ -79,7 +73,6 @@ const translation = {
   placeholder: {
     input: 'Lütfen girin',
     select: 'Lütfen seçin',
-    search: 'Ara...',
   },
   voice: {
     language: {
@@ -172,6 +165,7 @@ const translation = {
     workspace: 'Çalışma Alanı',
     createWorkspace: 'Çalışma Alanı Oluştur',
     helpCenter: 'Yardım',
+    communityFeedback: 'Geri Bildirim',
     roadmap: 'Yol haritası',
     community: 'Topluluk',
     about: 'Hakkında',
@@ -180,7 +174,6 @@ const translation = {
     compliance: 'Uygunluk',
     github: 'GitHub',
     contactUs: 'Bize Ulaşın',
-    forum: 'Forum',
   },
   settings: {
     accountGroup: 'HESAP',
@@ -733,7 +726,6 @@ const translation = {
     pasteFileLinkInputPlaceholder: 'URL\'yi giriniz...',
     pasteFileLinkInvalid: 'Geçersiz dosya bağlantısı',
     fileExtensionNotSupport: 'Dosya uzantısı desteklenmiyor',
-    fileExtensionBlocked: 'Bu dosya türü güvenlik nedenleriyle engellenmiştir',
   },
   license: {
     expiring_plural: '{{count}} gün içinde sona eriyor',
@@ -775,13 +767,6 @@ const translation = {
   },
   label: {
     optional: '(isteğe bağlı)',
-  },
-  noData: 'Veri yok',
-  dynamicSelect: {
-    error: 'Seçenekler yüklenemedi',
-    noData: 'Seçenek yok',
-    loading: 'Seçenekler yükleniyor...',
-    selected: '{{count}} seçildi',
   },
 }
 

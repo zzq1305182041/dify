@@ -1,5 +1,5 @@
 import time
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from typing import Any, cast
 
 from core.app.apps.base_app_queue_manager import AppQueueManager, PublishFrom
@@ -27,7 +27,6 @@ from core.app.entities.queue_entities import (
 )
 from core.workflow.entities import GraphInitParams
 from core.workflow.graph import Graph
-from core.workflow.graph_engine.layers.base import GraphEngineLayer
 from core.workflow.graph_events import (
     GraphEngineEvent,
     GraphRunFailedEvent,
@@ -70,12 +69,10 @@ class WorkflowBasedAppRunner:
         queue_manager: AppQueueManager,
         variable_loader: VariableLoader = DUMMY_VARIABLE_LOADER,
         app_id: str,
-        graph_engine_layers: Sequence[GraphEngineLayer] = (),
     ):
         self._queue_manager = queue_manager
         self._variable_loader = variable_loader
         self._app_id = app_id
-        self._graph_engine_layers = graph_engine_layers
 
     def _init_graph(
         self,
@@ -84,7 +81,6 @@ class WorkflowBasedAppRunner:
         workflow_id: str = "",
         tenant_id: str = "",
         user_id: str = "",
-        root_node_id: str | None = None,
     ) -> Graph:
         """
         Init graph
@@ -118,7 +114,7 @@ class WorkflowBasedAppRunner:
         )
 
         # init graph
-        graph = Graph.init(graph_config=graph_config, node_factory=node_factory, root_node_id=root_node_id)
+        graph = Graph.init(graph_config=graph_config, node_factory=node_factory)
 
         if not graph:
             raise ValueError("graph not found in workflow")

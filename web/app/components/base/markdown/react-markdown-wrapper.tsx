@@ -1,43 +1,46 @@
-import { AudioBlock, Img, Link, MarkdownButton, MarkdownForm, Paragraph, PluginImg, PluginParagraph, ScriptBlock, ThinkBlock, VideoBlock } from '@/app/components/base/markdown-blocks'
-import { ENABLE_SINGLE_DOLLAR_LATEX } from '@/config'
-import dynamic from 'next/dynamic'
-import type { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
-import RehypeKatex from 'rehype-katex'
-import RehypeRaw from 'rehype-raw'
-import RemarkBreaks from 'remark-breaks'
-import RemarkGfm from 'remark-gfm'
 import RemarkMath from 'remark-math'
+import RemarkBreaks from 'remark-breaks'
+import RehypeKatex from 'rehype-katex'
+import RemarkGfm from 'remark-gfm'
+import RehypeRaw from 'rehype-raw'
+import AudioBlock from '@/app/components/base/markdown-blocks/audio-block'
+import Img from '@/app/components/base/markdown-blocks/img'
+import Link from '@/app/components/base/markdown-blocks/link'
+import MarkdownButton from '@/app/components/base/markdown-blocks/button'
+import MarkdownForm from '@/app/components/base/markdown-blocks/form'
+import Paragraph from '@/app/components/base/markdown-blocks/paragraph'
+import ScriptBlock from '@/app/components/base/markdown-blocks/script-block'
+import ThinkBlock from '@/app/components/base/markdown-blocks/think-block'
+import VideoBlock from '@/app/components/base/markdown-blocks/video-block'
 import { customUrlTransform } from './markdown-utils'
 
-const CodeBlock = dynamic(() => import('@/app/components/base/markdown-blocks/code-block'), { ssr: false })
+import type { FC } from 'react'
 
-export type SimplePluginInfo = {
-  pluginUniqueIdentifier: string
-  pluginId: string
-}
+import dynamic from 'next/dynamic'
+
+const CodeBlock = dynamic(() => import('@/app/components/base/markdown-blocks/code-block'), { ssr: false })
 
 export type ReactMarkdownWrapperProps = {
   latexContent: any
   customDisallowedElements?: string[]
   customComponents?: Record<string, React.ComponentType<any>>
-  pluginInfo?: SimplePluginInfo
 }
 
 export const ReactMarkdownWrapper: FC<ReactMarkdownWrapperProps> = (props) => {
-  const { customComponents, latexContent, pluginInfo } = props
+  const { customComponents, latexContent } = props
 
   return (
     <ReactMarkdown
       remarkPlugins={[
         RemarkGfm,
-        [RemarkMath, { singleDollarTextMath: ENABLE_SINGLE_DOLLAR_LATEX }],
+        [RemarkMath, { singleDollarTextMath: false }],
         RemarkBreaks,
       ]}
       rehypePlugins={[
         RehypeKatex,
         RehypeRaw as any,
-        // The Rehype plug-in is used to remove the ref attribute of an element
+          // The Rehype plug-in is used to remove the ref attribute of an element
         () => {
           return (tree: any) => {
             const iterate = (node: any) => {
@@ -60,11 +63,11 @@ export const ReactMarkdownWrapper: FC<ReactMarkdownWrapperProps> = (props) => {
       disallowedElements={['iframe', 'head', 'html', 'meta', 'link', 'style', 'body', ...(props.customDisallowedElements || [])]}
       components={{
         code: CodeBlock,
-        img: (props: any) => pluginInfo ? <PluginImg {...props} pluginInfo={pluginInfo} /> : <Img {...props} />,
+        img: Img,
         video: VideoBlock,
         audio: AudioBlock,
         a: Link,
-        p: (props: any) => pluginInfo ? <PluginParagraph {...props} pluginInfo={pluginInfo} /> : <Paragraph {...props} />,
+        p: Paragraph,
         button: MarkdownButton,
         form: MarkdownForm,
         script: ScriptBlock as any,

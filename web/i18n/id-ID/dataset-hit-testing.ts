@@ -15,7 +15,6 @@ const translation = {
   },
   hit: {
     emptyTip: 'Hasil Pengujian Pengambilan akan ditampilkan di sini',
-    title: '{{num}} Potongan yang Diambil',
   },
   keyword: 'Kata kunci',
   noRecentTip: 'Tidak ada hasil kueri terbaru di sini',
@@ -28,7 +27,6 @@ const translation = {
   viewChart: 'Lihat GRAFIK VAKTOR',
   chunkDetail: 'Detail Potongan',
   title: 'Tes Pengambilan',
-  hitChunks: 'Pukul {{num}} potongan anak',
 }
 
 export default translation

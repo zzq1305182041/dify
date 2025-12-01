@@ -120,7 +120,6 @@ const translation = {
     verifyMail: 'Продолжите с кодом проверки',
     welcome: '👋 Добро пожаловать! Пожалуйста, заполните данные, чтобы начать.',
   },
-  pageTitleForE: 'Привет, давай начнем!',
 }
 
 export default translation

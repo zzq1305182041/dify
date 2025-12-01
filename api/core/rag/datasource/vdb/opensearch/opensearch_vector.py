@@ -161,7 +161,7 @@ class OpenSearchVector(BaseVector):
                         logger.exception("Error deleting document: %s", error)
 
     def delete(self):
-        self._client.indices.delete(index=self._collection_name.lower(), ignore_unavailable=True)
+        self._client.indices.delete(index=self._collection_name.lower())
 
     def text_exists(self, id: str) -> bool:
         try:

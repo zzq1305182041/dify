@@ -39,11 +39,11 @@ const Add = ({
   const { nodesReadOnly } = useNodesReadOnly()
   const { availableNextBlocks } = useAvailableBlocks(nodeData.type, nodeData.isInIteration || nodeData.isInLoop)
 
-  const handleSelect = useCallback<OnSelectBlock>((type, pluginDefaultValue) => {
+  const handleSelect = useCallback<OnSelectBlock>((type, toolDefaultValue) => {
     handleNodeAdd(
       {
         nodeType: type,
-        pluginDefaultValue,
+        toolDefaultValue,
       },
       {
         prevNodeId: nodeId,

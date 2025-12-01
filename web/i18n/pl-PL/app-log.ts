@@ -20,7 +20,6 @@ const translation = {
       tokens: 'TOKENY',
       user: 'UŻYTKOWNIK KOŃCOWY LUB KONTO',
       version: 'WERSJA',
-      triggered_from: 'URUCHOMIONE PRZEZ',
     },
     pagination: {
       previous: 'Poprzedni',
@@ -70,8 +69,6 @@ const translation = {
       quarterToDate: 'Od początku kwartału',
       yearToDate: 'Od początku roku',
       allTime: 'Cały czas',
-      custom: 'Niestandardowy',
-      last30days: 'Ostatnie 30 dni',
     },
     annotation: {
       all: 'Wszystkie',
@@ -102,15 +99,6 @@ const translation = {
     finalProcessing: 'Końcowa obróbka',
   },
   dateFormat: 'DD/MM/RRRR',
-  triggerBy: {
-    debugging: 'Debugowanie',
-    appRun: 'Aplikacja internetowa',
-    webhook: 'Webhook',
-    schedule: 'Harmonogram',
-    plugin: 'Wtyczka',
-    ragPipelineRun: 'Pipeline RAG',
-    ragPipelineDebugging: 'Debugowanie RAG',
-  },
 }
 
 export default translation

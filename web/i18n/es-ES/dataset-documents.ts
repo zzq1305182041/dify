@@ -81,10 +81,6 @@ const translation = {
       ok: 'Aceptar',
     },
     learnMore: 'Aprende más',
-    sort: {
-      uploadTime: 'Hora de subida',
-      hitCount: 'Conteo de Recuperaciones',
-    },
   },
   metadata: {
     title: 'Metadatos',

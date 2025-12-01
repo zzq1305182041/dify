@@ -3,7 +3,6 @@ import type { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { RiCloseLine, RiPlayLargeLine } from '@remixicon/react'
 import Run from '@/app/components/workflow/run'
-import { WorkflowContextProvider } from '@/app/components/workflow/context'
 import { useStore } from '@/app/components/app/store'
 import TooltipPlus from '@/app/components/base/tooltip'
 import { useRouter } from 'next/navigation'
@@ -11,10 +10,9 @@ import { useRouter } from 'next/navigation'
 type ILogDetail = {
   runID: string
   onClose: () => void
-  canReplay?: boolean
 }
 
-const DetailPanel: FC<ILogDetail> = ({ runID, onClose, canReplay = false }) => {
+const DetailPanel: FC<ILogDetail> = ({ runID, onClose }) => {
   const { t } = useTranslation()
   const appDetail = useStore(state => state.appDetail)
   const router = useRouter()
@@ -31,28 +29,24 @@ const DetailPanel: FC<ILogDetail> = ({ runID, onClose, canReplay = false }) => {
       </span>
       <div className='flex items-center bg-components-panel-bg'>
         <h1 className='system-xl-semibold shrink-0 px-4 py-1 text-text-primary'>{t('appLog.runDetail.workflowTitle')}</h1>
-        {canReplay && (
-          <TooltipPlus
-            popupContent={t('appLog.runDetail.testWithParams')}
-            popupClassName='rounded-xl'
+        <TooltipPlus
+          popupContent={t('appLog.runDetail.testWithParams')}
+          popupClassName='rounded-xl'
+        >
+          <button
+            type='button'
+            className='mr-1 flex h-6 w-6 items-center justify-center rounded-md hover:bg-state-base-hover'
+            aria-label={t('appLog.runDetail.testWithParams')}
+            onClick={handleReplay}
           >
-            <button
-              type='button'
-              className='mr-1 flex h-6 w-6 items-center justify-center rounded-md hover:bg-state-base-hover'
-              aria-label={t('appLog.runDetail.testWithParams')}
-              onClick={handleReplay}
-            >
-              <RiPlayLargeLine className='h-4 w-4 text-text-tertiary' />
-            </button>
-          </TooltipPlus>
-        )}
+            <RiPlayLargeLine className='h-4 w-4 text-text-tertiary' />
+          </button>
+        </TooltipPlus>
       </div>
-      <WorkflowContextProvider>
-        <Run
-          runDetailUrl={runID ? `/apps/${appDetail?.id}/workflow-runs/${runID}` : ''}
-          tracingListUrl={runID ? `/apps/${appDetail?.id}/workflow-runs/${runID}/node-executions` : ''}
-        />
-      </WorkflowContextProvider>
+      <Run
+        runDetailUrl={runID ? `/apps/${appDetail?.id}/workflow-runs/${runID}` : ''}
+        tracingListUrl={runID ? `/apps/${appDetail?.id}/workflow-runs/${runID}/node-executions` : ''}
+      />
     </div>
   )
 }

@@ -7,30 +7,11 @@ import { SupportUploadFileTypes } from '@/app/components/workflow/types'
 import type { FileResponse } from '@/types/workflow'
 import { TransferMethod } from '@/types/app'
 
-/**
- * Get appropriate error message for file upload errors
- * @param error - The error object from upload failure
- * @param defaultMessage - Default error message to use if no specific error is matched
- * @param t - Translation function
- * @returns Localized error message
- */
-export const getFileUploadErrorMessage = (error: any, defaultMessage: string, t: (key: string) => string): string => {
-  const errorCode = error?.response?.code
-
-  if (errorCode === 'forbidden')
-    return error?.response?.message
-
-  if (errorCode === 'file_extension_blocked')
-    return t('common.fileUploader.fileExtensionBlocked')
-
-  return defaultMessage
-}
-
 type FileUploadParams = {
   file: File
   onProgressCallback: (progress: number) => void
   onSuccessCallback: (res: { id: string }) => void
-  onErrorCallback: (error?: any) => void
+  onErrorCallback: () => void
 }
 type FileUpload = (v: FileUploadParams, isPublic?: boolean, url?: string) => void
 export const fileUpload: FileUpload = ({
@@ -56,8 +37,8 @@ export const fileUpload: FileUpload = ({
     .then((res: { id: string }) => {
       onSuccessCallback(res)
     })
-    .catch((error) => {
-      onErrorCallback(error)
+    .catch(() => {
+      onErrorCallback()
     })
 }
 

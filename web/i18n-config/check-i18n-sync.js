@@ -3,36 +3,26 @@
 const fs = require('fs')
 const path = require('path')
 const { camelCase } = require('lodash')
-const ts = require('typescript')
 
 // Import the NAMESPACES array from i18next-config.ts
 function getNamespacesFromConfig() {
   const configPath = path.join(__dirname, 'i18next-config.ts')
   const configContent = fs.readFileSync(configPath, 'utf8')
-  const sourceFile = ts.createSourceFile(configPath, configContent, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
-
-  const namespaces = []
-
-  const visit = (node) => {
-    if (
-      ts.isVariableDeclaration(node)
-      && node.name.getText() === 'NAMESPACES'
-      && node.initializer
-      && ts.isArrayLiteralExpression(node.initializer)
-    ) {
-      node.initializer.elements.forEach((el) => {
-        if (ts.isStringLiteral(el))
-          namespaces.push(el.text)
-      })
-    }
-    ts.forEachChild(node, visit)
-  }
-
-  visit(sourceFile)
-
-  if (!namespaces.length)
+  
+  // Extract NAMESPACES array using regex
+  const namespacesMatch = configContent.match(/const NAMESPACES = \[([\s\S]*?)\]/)
+  if (!namespacesMatch) {
     throw new Error('Could not find NAMESPACES array in i18next-config.ts')
-
+  }
+  
+  // Parse the namespaces
+  const namespacesStr = namespacesMatch[1]
+  const namespaces = namespacesStr
+    .split(',')
+    .map(line => line.trim())
+    .filter(line => line.startsWith("'") || line.startsWith('"'))
+    .map(line => line.slice(1, -1)) // Remove quotes
+  
   return namespaces
 }
 

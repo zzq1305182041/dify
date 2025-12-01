@@ -6,7 +6,6 @@ import { RiArrowRightUpLine } from '@remixicon/react'
 import cn from '@/utils/classnames'
 import AppIcon from '@/app/components/base/app-icon'
 import type { RelatedApp } from '@/models/datasets'
-import { AppModeEnum } from '@/types/app'
 
 type ILikedItemProps = {
   appStatus?: boolean
@@ -15,11 +14,11 @@ type ILikedItemProps = {
 }
 
 const appTypeMap = {
-  [AppModeEnum.CHAT]: 'Chatbot',
-  [AppModeEnum.COMPLETION]: 'Completion',
-  [AppModeEnum.AGENT_CHAT]: 'Agent',
-  [AppModeEnum.ADVANCED_CHAT]: 'Chatflow',
-  [AppModeEnum.WORKFLOW]: 'Workflow',
+  'chat': 'Chatbot',
+  'completion': 'Completion',
+  'agent-chat': 'Agent',
+  'advanced-chat': 'Chatflow',
+  'workflow': 'Workflow',
 }
 
 const LikedItem = ({

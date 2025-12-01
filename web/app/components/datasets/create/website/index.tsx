@@ -13,7 +13,6 @@ import type { CrawlOptions, CrawlResultItem } from '@/models/datasets'
 import { DataSourceProvider } from '@/models/common'
 import { ENABLE_WEBSITE_FIRECRAWL, ENABLE_WEBSITE_JINAREADER, ENABLE_WEBSITE_WATERCRAWL } from '@/config'
 import type { DataSourceAuth } from '@/app/components/header/account-setting/data-source-page-new/types'
-import { ACCOUNT_SETTING_TAB } from '@/app/components/header/account-setting/constants'
 
 type Props = {
   onPreview: (payload: CrawlResultItem) => void
@@ -49,7 +48,7 @@ const Website: FC<Props> = ({
 
   const handleOnConfig = useCallback(() => {
     setShowAccountSettingModal({
-      payload: ACCOUNT_SETTING_TAB.DATA_SOURCE,
+      payload: 'data-source',
     })
   }, [setShowAccountSettingModal])
 

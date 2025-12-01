@@ -1,7 +1,4 @@
 const { codeInspectorPlugin } = require('code-inspector-plugin')
-
-const isDev = process.env.NODE_ENV === 'development'
-
 const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
@@ -140,9 +137,6 @@ const nextConfig = {
     ]
   },
   output: 'standalone',
-  compiler: {
-    removeConsole: isDev ? false : { exclude: ['warn', 'error'] },
-  }
 }
 
 module.exports = withPWA(withBundleAnalyzer(withMDX(nextConfig)))

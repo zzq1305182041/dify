@@ -17,7 +17,6 @@ import { checkHasQueryBlock } from '@/app/components/base/prompt-editor/constant
 import useAvailableVarList from '@/app/components/workflow/nodes/_base/hooks/use-available-var-list'
 import { supportFunctionCall } from '@/utils/tool-call'
 import useInspectVarsCrud from '../../hooks/use-inspect-vars-crud'
-import { AppModeEnum } from '@/types/app'
 
 const useConfig = (id: string, payload: ParameterExtractorNodeType) => {
   const {
@@ -87,13 +86,13 @@ const useConfig = (id: string, payload: ParameterExtractorNodeType) => {
   const model = inputs.model || {
     provider: '',
     name: '',
-    mode: AppModeEnum.CHAT,
+    mode: 'chat',
     completion_params: {
       temperature: 0.7,
     },
   }
   const modelMode = inputs.model?.mode
-  const isChatModel = modelMode === AppModeEnum.CHAT
+  const isChatModel = modelMode === 'chat'
   const isCompletionModel = !isChatModel
 
   const {
@@ -134,7 +133,7 @@ const useConfig = (id: string, payload: ParameterExtractorNodeType) => {
       draft.model.mode = model.mode!
       const isModeChange = model.mode !== inputRef.current.model?.mode
       if (isModeChange && defaultConfig && Object.keys(defaultConfig).length > 0)
-        appendDefaultPromptConfig(draft, defaultConfig, model.mode === AppModeEnum.CHAT)
+        appendDefaultPromptConfig(draft, defaultConfig, model.mode === 'chat')
     })
     setInputs(newInputs)
     setModelChanged(true)

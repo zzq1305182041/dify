@@ -81,10 +81,6 @@ const translation = {
       ok: 'Tamam',
     },
     learnMore: 'Daha fazla bilgi edinin',
-    sort: {
-      uploadTime: 'Yükleme Zamanı',
-      hitCount: 'Alım Sayısı',
-    },
   },
   metadata: {
     title: 'Meta Veri',

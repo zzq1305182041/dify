@@ -125,7 +125,6 @@ const translation = {
     haveAccount: 'Masz już konto?',
     welcome: '👋 Witaj! Proszę wypełnić szczegóły, aby rozpocząć.',
   },
-  pageTitleForE: 'Hej, zaczynajmy!',
 }
 
 export default translation

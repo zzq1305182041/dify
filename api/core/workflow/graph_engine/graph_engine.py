@@ -192,6 +192,7 @@ class GraphEngine:
         self._dispatcher = Dispatcher(
             event_queue=self._event_queue,
             event_handler=self._event_handler_registry,
+            event_collector=self._event_manager,
             execution_coordinator=self._execution_coordinator,
             event_emitter=self._event_manager,
         )
@@ -232,7 +233,7 @@ class GraphEngine:
                 self._graph_execution.start()
             else:
                 self._graph_execution.paused = False
-                self._graph_execution.pause_reasons = []
+                self._graph_execution.pause_reason = None
 
             start_event = GraphRunStartedEvent()
             self._event_manager.notify_layers(start_event)
@@ -246,11 +247,8 @@ class GraphEngine:
 
             # Handle completion
             if self._graph_execution.is_paused:
-                pause_reasons = self._graph_execution.pause_reasons
-                assert pause_reasons, "pause_reasons should not be empty when execution is paused."
-                # Ensure we have a valid PauseReason for the event
                 paused_event = GraphRunPausedEvent(
-                    reasons=pause_reasons,
+                    reason=self._graph_execution.pause_reason,
                     outputs=self._graph_runtime_state.outputs,
                 )
                 self._event_manager.notify_layers(paused_event)

@@ -158,7 +158,6 @@ class MetadataDetail(BaseModel):
 class DocumentMetadataOperation(BaseModel):
     document_id: str
     metadata_list: list[MetadataDetail]
-    partial_update: bool = False
 
 
 class MetadataOperationData(BaseModel):

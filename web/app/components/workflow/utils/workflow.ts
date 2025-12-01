@@ -34,9 +34,6 @@ export const canRunBySingle = (nodeType: BlockEnum, isChildNode: boolean) => {
     || nodeType === BlockEnum.VariableAggregator
     || nodeType === BlockEnum.Assigner
     || nodeType === BlockEnum.DataSource
-    || nodeType === BlockEnum.TriggerSchedule
-    || nodeType === BlockEnum.TriggerWebhook
-    || nodeType === BlockEnum.TriggerPlugin
 }
 
 export const isSupportCustomRunForm = (nodeType: BlockEnum) => {
@@ -95,29 +92,18 @@ export const getNodesConnectedSourceOrTargetHandleIdsMap = (changes: ConnectedSo
   return nodesConnectedSourceOrTargetHandleIdsMap
 }
 
-export const getValidTreeNodes = (nodes: Node[], edges: Edge[]) => {
-  // Find all start nodes (Start and Trigger nodes)
-  const startNodes = nodes.filter(node =>
-    node.data.type === BlockEnum.Start
-    || node.data.type === BlockEnum.TriggerSchedule
-    || node.data.type === BlockEnum.TriggerWebhook
-    || node.data.type === BlockEnum.TriggerPlugin,
-  )
-
-  if (startNodes.length === 0) {
+export const getValidTreeNodes = (startNode: Node, nodes: Node[], edges: Edge[]) => {
+  if (!startNode) {
     return {
       validNodes: [],
       maxDepth: 0,
     }
   }
 
-  const list: Node[] = []
-  let maxDepth = 0
+  const list: Node[] = [startNode]
+  let maxDepth = 1
 
   const traverse = (root: Node, depth: number) => {
-    // Add the current node to the list
-    list.push(root)
-
     if (depth > maxDepth)
       maxDepth = depth
 
@@ -125,19 +111,19 @@ export const getValidTreeNodes = (nodes: Node[], edges: Edge[]) => {
 
     if (outgoers.length) {
       outgoers.forEach((outgoer) => {
-        // Only traverse if we haven't processed this node yet (avoid cycles)
-        if (!list.find(n => n.id === outgoer.id)) {
-          if (outgoer.data.type === BlockEnum.Iteration)
-            list.push(...nodes.filter(node => node.parentId === outgoer.id))
-          if (outgoer.data.type === BlockEnum.Loop)
-            list.push(...nodes.filter(node => node.parentId === outgoer.id))
+        list.push(outgoer)
 
-          traverse(outgoer, depth + 1)
-        }
+        if (outgoer.data.type === BlockEnum.Iteration)
+          list.push(...nodes.filter(node => node.parentId === outgoer.id))
+        if (outgoer.data.type === BlockEnum.Loop)
+          list.push(...nodes.filter(node => node.parentId === outgoer.id))
+
+        traverse(outgoer, depth + 1)
       })
     }
     else {
-      // Leaf node - add iteration/loop children if any
+      list.push(root)
+
       if (root.data.type === BlockEnum.Iteration)
         list.push(...nodes.filter(node => node.parentId === root.id))
       if (root.data.type === BlockEnum.Loop)
@@ -145,11 +131,7 @@ export const getValidTreeNodes = (nodes: Node[], edges: Edge[]) => {
     }
   }
 
-  // Start traversal from all start nodes
-  startNodes.forEach((startNode) => {
-    if (!list.find(n => n.id === startNode.id))
-      traverse(startNode, 1)
-  })
+  traverse(startNode, maxDepth)
 
   return {
     validNodes: uniqBy(list, 'id'),

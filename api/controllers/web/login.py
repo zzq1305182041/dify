@@ -81,7 +81,6 @@ class LoginStatusApi(Resource):
     )
     def get(self):
         app_code = request.args.get("app_code")
-        user_id = request.args.get("user_id")
         token = extract_webapp_access_token(request)
         if not app_code:
             return {
@@ -104,7 +103,7 @@ class LoginStatusApi(Resource):
                 user_logged_in = False
 
         try:
-            _ = decode_jwt_token(app_code=app_code, user_id=user_id)
+            _ = decode_jwt_token(app_code=app_code)
             app_logged_in = True
         except Exception:
             app_logged_in = False

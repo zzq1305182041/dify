@@ -7,7 +7,6 @@ const translation = {
     agents: 'Estratégias do agente',
     tools: 'Ferramentas',
     datasources: 'Fontes de dados',
-    triggers: 'Gatilhos',
   },
   categorySingle: {
     model: 'Modelo',
@@ -16,7 +15,6 @@ const translation = {
     extension: 'Extensão',
     tool: 'Ferramenta',
     datasource: 'Fonte de dados',
-    trigger: 'Gatilho',
   },
   list: {
     source: {
@@ -47,7 +45,6 @@ const translation = {
       detail: 'Detalhes',
       remove: 'Retirar',
       viewDetail: 'Ver detalhes',
-      back: 'Voltar',
     },
     toolSelector: {
       uninstalledLink: 'Gerenciar em plug-ins',
@@ -308,12 +305,6 @@ const translation = {
     nextUpdateTime: 'Próxima atualização automática: {{time}}',
     partialUPdate: 'Apenas os seguintes {{num}} plugins serão atualizados automaticamente',
     updateSettings: 'Atualizar Configurações',
-  },
-  readmeInfo: {
-    title: 'LEIA-ME',
-    needHelpCheckReadme: 'Precisa de ajuda? Confira o README.',
-    noReadmeAvailable: 'Nenhum README disponível',
-    failedToFetch: 'Falha ao buscar o README',
   },
 }
 

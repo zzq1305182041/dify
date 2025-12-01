@@ -58,7 +58,6 @@ const CustomSelect = <T extends Option>({
     onOpenChange,
     placement,
     offset,
-    triggerPopupSameWidth = true,
   } = containerProps || {}
   const {
     className: triggerClassName,
@@ -86,7 +85,6 @@ const CustomSelect = <T extends Option>({
       offset={offset || 4}
       open={mergedOpen}
       onOpenChange={handleOpenChange}
-      triggerPopupSameWidth={triggerPopupSameWidth}
     >
       <PortalToFollowElemTrigger
         onClick={() => handleOpenChange(!mergedOpen)}

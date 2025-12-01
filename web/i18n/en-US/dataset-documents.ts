@@ -40,10 +40,6 @@ const translation = {
       enableTip: 'The file can be indexed',
       disableTip: 'The file cannot be indexed',
     },
-    sort: {
-      uploadTime: 'Upload Time',
-      hitCount: 'Retrieval Count',
-    },
     status: {
       queuing: 'Queuing',
       indexing: 'Indexing',

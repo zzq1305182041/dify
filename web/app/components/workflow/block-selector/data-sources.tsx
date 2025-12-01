@@ -17,7 +17,7 @@ import PluginList, { type ListRef } from '@/app/components/workflow/block-select
 import { useGlobalPublicStore } from '@/context/global-public-context'
 import { DEFAULT_FILE_EXTENSIONS_IN_LOCAL_FILE_DATA_SOURCE } from './constants'
 import { useMarketplacePlugins } from '../../plugins/marketplace/hooks'
-import { PluginCategoryEnum } from '../../plugins/types'
+import { PluginType } from '../../plugins/types'
 import { useGetLanguage } from '@/context/i18n'
 
 type AllToolsProps = {
@@ -55,7 +55,7 @@ const DataSources = ({
     })
   }, [searchText, dataSources, language])
 
-  const handleSelect = useCallback((_: BlockEnum, toolDefaultValue: ToolDefaultValue) => {
+  const handleSelect = useCallback((_: any, toolDefaultValue: ToolDefaultValue) => {
     let defaultValue: DataSourceDefaultValue = {
       plugin_id: toolDefaultValue?.provider_id,
       provider_type: toolDefaultValue?.provider_type,
@@ -63,7 +63,6 @@ const DataSources = ({
       datasource_name: toolDefaultValue?.tool_name,
       datasource_label: toolDefaultValue?.tool_label,
       title: toolDefaultValue?.title,
-      plugin_unique_identifier: toolDefaultValue?.plugin_unique_identifier,
     }
     // Update defaultValue with fileExtensions if this is the local file data source
     if (toolDefaultValue?.provider_id === 'langgenius/file' && toolDefaultValue?.provider_name === 'file') {
@@ -87,16 +86,16 @@ const DataSources = ({
     if (searchText) {
       fetchPlugins({
         query: searchText,
-        category: PluginCategoryEnum.datasource,
+        category: PluginType.datasource,
       })
     }
   }, [searchText, enable_marketplace])
 
   return (
-    <div className={cn('w-[400px] min-w-0 max-w-full', className)}>
+    <div className={cn(className)}>
       <div
         ref={wrapElemRef}
-        className='max-h-[464px] overflow-y-auto overflow-x-hidden'
+        className='max-h-[464px] overflow-y-auto'
         onScroll={pluginRef.current?.handleScroll}
       >
         <Tools

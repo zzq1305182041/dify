@@ -65,17 +65,10 @@ const translation = {
     deleteConfirmTitle: 'Ștergere?',
     no: 'Nu',
     confirmAction: 'Vă rugăm să confirmați acțiunea dumneavoastră.',
-    noSearchResults: 'Nu au fost găsite {{content}}',
-    resetKeywords: 'Resetează cuvintele cheie',
-    selectCount: '{{count}} Selectat',
-    searchCount: 'Găsește {{count}} {{content}}',
-    noSearchCount: '0 {{content}}',
-    now: 'Acum',
   },
   placeholder: {
     input: 'Vă rugăm să introduceți',
     select: 'Vă rugăm să selectați',
-    search: 'Caută...',
   },
   voice: {
     language: {
@@ -168,6 +161,7 @@ const translation = {
     workspace: 'Spațiu de lucru',
     createWorkspace: 'Creează Spațiu de lucru',
     helpCenter: 'Ajutor',
+    communityFeedback: 'Feedback',
     roadmap: 'Plan de acțiune',
     community: 'Comunitate',
     about: 'Despre',
@@ -176,7 +170,6 @@ const translation = {
     support: 'Suport',
     compliance: 'Conformitate',
     contactUs: 'Contactați-ne',
-    forum: 'Forum',
   },
   settings: {
     accountGroup: 'CONT',
@@ -733,7 +726,6 @@ const translation = {
     pasteFileLinkInvalid: 'Link fișier nevalid',
     uploadFromComputerLimit: 'Încărcarea fișierului nu poate depăși {{size}}',
     pasteFileLink: 'Lipiți linkul fișierului',
-    fileExtensionBlocked: 'Acest tip de fișier este blocat din motive de securitate',
   },
   license: {
     expiring: 'Expiră într-o zi',
@@ -775,13 +767,6 @@ const translation = {
   },
   label: {
     optional: '(opțional)',
-  },
-  noData: 'Fără date',
-  dynamicSelect: {
-    error: 'Încărcarea opțiunilor a eșuat',
-    noData: 'Nicio opțiune disponibilă',
-    loading: 'Se încarcă opțiuni...',
-    selected: '{{count}} selectat',
   },
 }
 

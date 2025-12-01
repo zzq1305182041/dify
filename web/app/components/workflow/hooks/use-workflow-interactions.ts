@@ -316,10 +316,7 @@ export const useWorkflowUpdate = () => {
         edges: initialEdges(edges, nodes),
       },
     } as any)
-
-    // Only set viewport if it exists and is valid
-    if (viewport && typeof viewport.x === 'number' && typeof viewport.y === 'number' && typeof viewport.zoom === 'number')
-      setViewport(viewport)
+    setViewport(viewport)
   }, [eventEmitter, reactflow])
 
   return {

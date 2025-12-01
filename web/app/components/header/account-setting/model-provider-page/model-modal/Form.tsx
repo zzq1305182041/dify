@@ -264,7 +264,7 @@ function Form<
       )
     }
 
-    if (formSchema.type === FormTypeEnum.checkbox) {
+    if (formSchema.type === FormTypeEnum.boolean) {
       const {
         variable, label, show_on, required,
       } = formSchema as CredentialFormSchemaRadio

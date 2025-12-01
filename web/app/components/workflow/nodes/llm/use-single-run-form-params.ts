@@ -12,7 +12,6 @@ import useConfigVision from '../../hooks/use-config-vision'
 import { noop } from 'lodash-es'
 import { findVariableWhenOnLLMVision } from '../utils'
 import useAvailableVarList from '../_base/hooks/use-available-var-list'
-import { AppModeEnum } from '@/types/app'
 
 const i18nPrefix = 'workflow.nodes.llm'
 type Params = {
@@ -57,7 +56,7 @@ const useSingleRunFormParams = ({
   // model
   const model = inputs.model
   const modelMode = inputs.model?.mode
-  const isChatModel = modelMode === AppModeEnum.CHAT
+  const isChatModel = modelMode === 'chat'
   const {
     isVisionModel,
   } = useConfigVision(model, {

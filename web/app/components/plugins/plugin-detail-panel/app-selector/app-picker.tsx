@@ -12,7 +12,7 @@ import type {
 } from '@floating-ui/react'
 import Input from '@/app/components/base/input'
 import AppIcon from '@/app/components/base/app-icon'
-import { type App, AppModeEnum } from '@/types/app'
+import type { App } from '@/types/app'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
@@ -118,15 +118,15 @@ const AppPicker: FC<Props> = ({
 
   const getAppType = (app: App) => {
     switch (app.mode) {
-      case AppModeEnum.ADVANCED_CHAT:
+      case 'advanced-chat':
         return 'chatflow'
-      case AppModeEnum.AGENT_CHAT:
+      case 'agent-chat':
         return 'agent'
-      case AppModeEnum.CHAT:
+      case 'chat':
         return 'chat'
-      case AppModeEnum.COMPLETION:
+      case 'completion':
         return 'completion'
-      case AppModeEnum.WORKFLOW:
+      case 'workflow':
         return 'workflow'
     }
   }

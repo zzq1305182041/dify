@@ -93,6 +93,7 @@ const translation = {
   intro5: 'can be published',
   intro6: ' as an independent service.',
   unavailable: 'Unavailable',
+  unavailableTip: 'Embedding model is not available, the default embedding model needs to be configured',
   datasets: 'KNOWLEDGE',
   datasetsApi: 'API ACCESS',
   externalKnowledgeForm: {

@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib
 import json
 from collections.abc import Mapping, Sequence
+from collections.abc import Mapping as TypingMapping
 from copy import deepcopy
 from dataclasses import dataclass
 from typing import Any, Protocol
@@ -10,7 +11,6 @@ from typing import Any, Protocol
 from pydantic.json import pydantic_encoder
 
 from core.model_runtime.entities.llm_entities import LLMUsage
-from core.workflow.entities.pause_reason import PauseReason
 from core.workflow.runtime.variable_pool import VariablePool
 
 
@@ -47,11 +47,7 @@ class ReadyQueueProtocol(Protocol):
 
 
 class GraphExecutionProtocol(Protocol):
-    """Structural interface for graph execution aggregate.
-
-    Defines the minimal set of attributes and methods required from a GraphExecution entity
-    for runtime orchestration and state management.
-    """
+    """Structural interface for graph execution aggregate."""
 
     workflow_id: str
     started: bool
@@ -59,7 +55,6 @@ class GraphExecutionProtocol(Protocol):
     aborted: bool
     error: Exception | None
     exceptions_count: int
-    pause_reasons: list[PauseReason]
 
     def start(self) -> None:
         """Transition execution into the running state."""
@@ -105,8 +100,8 @@ class ResponseStreamCoordinatorProtocol(Protocol):
 class GraphProtocol(Protocol):
     """Structural interface required from graph instances attached to the runtime state."""
 
-    nodes: Mapping[str, object]
-    edges: Mapping[str, object]
+    nodes: TypingMapping[str, object]
+    edges: TypingMapping[str, object]
     root_node: object
 
     def get_outgoing_edges(self, node_id: str) -> Sequence[object]: ...

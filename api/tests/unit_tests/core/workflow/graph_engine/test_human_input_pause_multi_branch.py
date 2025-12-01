@@ -14,7 +14,7 @@ from core.workflow.graph_events import (
     NodeRunStreamChunkEvent,
     NodeRunSucceededEvent,
 )
-from core.workflow.nodes.base.entities import OutputVariableEntity, OutputVariableType
+from core.workflow.nodes.base.entities import VariableSelector
 from core.workflow.nodes.end.end_node import EndNode
 from core.workflow.nodes.end.entities import EndNodeData
 from core.workflow.nodes.human_input import HumanInputNode
@@ -63,6 +63,7 @@ def _build_branching_graph(mock_config: MockConfig) -> tuple[Graph, GraphRuntime
         graph_init_params=graph_init_params,
         graph_runtime_state=graph_runtime_state,
     )
+    start_node.init_node_data(start_config["data"])
 
     def _create_llm_node(node_id: str, title: str, prompt_text: str) -> MockLLMNode:
         llm_data = LLMNodeData(
@@ -87,6 +88,7 @@ def _build_branching_graph(mock_config: MockConfig) -> tuple[Graph, GraphRuntime
             graph_runtime_state=graph_runtime_state,
             mock_config=mock_config,
         )
+        llm_node.init_node_data(llm_config["data"])
         return llm_node
 
     llm_initial = _create_llm_node("llm_initial", "Initial LLM", "Initial stream")
@@ -103,6 +105,7 @@ def _build_branching_graph(mock_config: MockConfig) -> tuple[Graph, GraphRuntime
         graph_init_params=graph_init_params,
         graph_runtime_state=graph_runtime_state,
     )
+    human_node.init_node_data(human_config["data"])
 
     llm_primary = _create_llm_node("llm_primary", "Primary LLM", "Primary stream output")
     llm_secondary = _create_llm_node("llm_secondary", "Secondary LLM", "Secondary")
@@ -110,12 +113,8 @@ def _build_branching_graph(mock_config: MockConfig) -> tuple[Graph, GraphRuntime
     end_primary_data = EndNodeData(
         title="End Primary",
         outputs=[
-            OutputVariableEntity(
-                variable="initial_text", value_type=OutputVariableType.STRING, value_selector=["llm_initial", "text"]
-            ),
-            OutputVariableEntity(
-                variable="primary_text", value_type=OutputVariableType.STRING, value_selector=["llm_primary", "text"]
-            ),
+            VariableSelector(variable="initial_text", value_selector=["llm_initial", "text"]),
+            VariableSelector(variable="primary_text", value_selector=["llm_primary", "text"]),
         ],
         desc=None,
     )
@@ -126,18 +125,13 @@ def _build_branching_graph(mock_config: MockConfig) -> tuple[Graph, GraphRuntime
         graph_init_params=graph_init_params,
         graph_runtime_state=graph_runtime_state,
     )
+    end_primary.init_node_data(end_primary_config["data"])
 
     end_secondary_data = EndNodeData(
         title="End Secondary",
         outputs=[
-            OutputVariableEntity(
-                variable="initial_text", value_type=OutputVariableType.STRING, value_selector=["llm_initial", "text"]
-            ),
-            OutputVariableEntity(
-                variable="secondary_text",
-                value_type=OutputVariableType.STRING,
-                value_selector=["llm_secondary", "text"],
-            ),
+            VariableSelector(variable="initial_text", value_selector=["llm_initial", "text"]),
+            VariableSelector(variable="secondary_text", value_selector=["llm_secondary", "text"]),
         ],
         desc=None,
     )
@@ -148,6 +142,7 @@ def _build_branching_graph(mock_config: MockConfig) -> tuple[Graph, GraphRuntime
         graph_init_params=graph_init_params,
         graph_runtime_state=graph_runtime_state,
     )
+    end_secondary.init_node_data(end_secondary_config["data"])
 
     graph = (
         Graph.new()

@@ -7,7 +7,6 @@ const translation = {
     bundles: 'Пакеты',
     agents: 'Агентские стратегии',
     datasources: 'Источники данных',
-    triggers: 'Триггеры',
   },
   categorySingle: {
     bundle: 'Связка',
@@ -16,7 +15,6 @@ const translation = {
     extension: 'Расширение',
     tool: 'Инструмент',
     datasource: 'Источник данных',
-    trigger: 'Спусковой крючок',
   },
   list: {
     source: {
@@ -47,7 +45,6 @@ const translation = {
       install: 'Устанавливать',
       update: 'Обновлять',
       checkUpdate: 'Проверить обновление',
-      back: 'Назад',
     },
     toolSelector: {
       placeholder: 'Выберите инструмент...',
@@ -308,12 +305,6 @@ const translation = {
     excludeUpdate: 'Следующие {{num}} плагины не будут обновляться автоматически',
     partialUPdate: 'Только следующие {{num}} плагины будут обновляться автоматически',
     changeTimezone: 'Чтобы изменить часовой пояс, перейдите в <setTimezone>Настройки</setTimezone>',
-  },
-  readmeInfo: {
-    title: 'ПРОЧТИ_МЕНЯ',
-    needHelpCheckReadme: 'Нужна помощь? Ознакомьтесь с файлом README.',
-    noReadmeAvailable: 'README недоступен',
-    failedToFetch: 'Не удалось получить README',
   },
 }
 

@@ -42,7 +42,6 @@ const translation = {
     },
     isAboutToExpire: {
       summary: 'Jangan khawatir — ini tidak akan memengaruhi langganan Anda saat ini, tetapi Anda tidak akan mendapatkan diskon pendidikan saat diperpanjang kecuali Anda memverifikasi status Anda lagi.',
-      title: 'Status pendidikan Anda akan berakhir pada {{date}}',
     },
     stillInEducation: {
       isAboutToExpire: 'Verifikasi ulang sekarang untuk mendapatkan kupon baru untuk tahun akademik mendatang. Ini akan disimpan ke akun Anda dan siap digunakan pada perpanjangan berikutnya.',

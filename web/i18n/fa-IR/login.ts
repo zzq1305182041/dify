@@ -120,7 +120,6 @@ const translation = {
     noAccount: 'حساب کاربری ندارید؟',
     verifyMail: 'ادامه با کد تأیید',
   },
-  pageTitleForE: 'هی، بیا شروع کنیم!',
 }
 
 export default translation

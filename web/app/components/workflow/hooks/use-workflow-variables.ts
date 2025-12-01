@@ -10,25 +10,20 @@ import type {
 } from '@/app/components/workflow/types'
 import { useIsChatMode } from './use-workflow'
 import { useStoreApi } from 'reactflow'
+import { useStore } from '@/app/components/workflow/store'
 import type { Type } from '../nodes/llm/types'
 import useMatchSchemaType from '../nodes/_base/components/variable/use-match-schema-type'
-import {
-  useAllBuiltInTools,
-  useAllCustomTools,
-  useAllMCPTools,
-  useAllWorkflowTools,
-} from '@/service/use-tools'
 
 export const useWorkflowVariables = () => {
   const { t } = useTranslation()
   const workflowStore = useWorkflowStore()
   const { schemaTypeDefinitions } = useMatchSchemaType()
 
-  const { data: buildInTools } = useAllBuiltInTools()
-  const { data: customTools } = useAllCustomTools()
-  const { data: workflowTools } = useAllWorkflowTools()
-  const { data: mcpTools } = useAllMCPTools()
-
+  const buildInTools = useStore(s => s.buildInTools)
+  const customTools = useStore(s => s.customTools)
+  const workflowTools = useStore(s => s.workflowTools)
+  const mcpTools = useStore(s => s.mcpTools)
+  const dataSourceList = useStore(s => s.dataSourceList)
   const getNodeAvailableVars = useCallback(({
     parentNode,
     beforeNodes,
@@ -48,7 +43,6 @@ export const useWorkflowVariables = () => {
       conversationVariables,
       environmentVariables,
       ragPipelineVariables,
-      dataSourceList,
     } = workflowStore.getState()
     return toNodeAvailableVars({
       parentNode,
@@ -60,15 +54,15 @@ export const useWorkflowVariables = () => {
       ragVariables: ragPipelineVariables,
       filterVar,
       allPluginInfoList: {
-        buildInTools: buildInTools || [],
-        customTools: customTools || [],
-        workflowTools: workflowTools || [],
-        mcpTools: mcpTools || [],
-        dataSourceList: dataSourceList || [],
+        buildInTools,
+        customTools,
+        workflowTools,
+        mcpTools,
+        dataSourceList: dataSourceList ?? [],
       },
       schemaTypeDefinitions,
     })
-  }, [t, workflowStore, schemaTypeDefinitions, buildInTools, customTools, workflowTools, mcpTools])
+  }, [t, workflowStore, schemaTypeDefinitions, buildInTools])
 
   const getCurrentVariableType = useCallback(({
     parentNode,
@@ -93,6 +87,10 @@ export const useWorkflowVariables = () => {
       conversationVariables,
       environmentVariables,
       ragPipelineVariables,
+      buildInTools,
+      customTools,
+      workflowTools,
+      mcpTools,
       dataSourceList,
     } = workflowStore.getState()
     return getVarType({
@@ -107,16 +105,16 @@ export const useWorkflowVariables = () => {
       conversationVariables,
       ragVariables: ragPipelineVariables,
       allPluginInfoList: {
-        buildInTools: buildInTools || [],
-        customTools: customTools || [],
-        workflowTools: workflowTools || [],
-        mcpTools: mcpTools || [],
+        buildInTools,
+        customTools,
+        workflowTools,
+        mcpTools,
         dataSourceList: dataSourceList ?? [],
       },
       schemaTypeDefinitions,
       preferSchemaType,
     })
-  }, [workflowStore, getVarType, schemaTypeDefinitions, buildInTools, customTools, workflowTools, mcpTools])
+  }, [workflowStore, getVarType, schemaTypeDefinitions])
 
   return {
     getNodeAvailableVars,

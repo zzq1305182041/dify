@@ -1,10 +1,16 @@
-import type { Collection, CollectionType } from '@/app/components/tools/types'
-import type { CommonNodeType } from '@/app/components/workflow/types'
-import type { ResourceVarInputs } from '../_base/types'
+import type { CollectionType } from '@/app/components/tools/types'
+import type { CommonNodeType, ValueSelector } from '@/app/components/workflow/types'
 
-// Use base types directly
-export { VarKindType as VarType } from '../_base/types'
-export type ToolVarInputs = ResourceVarInputs
+export enum VarType {
+  variable = 'variable',
+  constant = 'constant',
+  mixed = 'mixed',
+}
+
+export type ToolVarInputs = Record<string, {
+  type: VarType
+  value?: string | ValueSelector | any
+}>
 
 export type ToolNodeType = CommonNodeType & {
   provider_id: string
@@ -20,7 +26,4 @@ export type ToolNodeType = CommonNodeType & {
   tool_description?: string
   is_team_authorization?: boolean
   params?: Record<string, any>
-  plugin_id?: string
-  provider_icon?: Collection['icon']
-  plugin_unique_identifier?: string
 }

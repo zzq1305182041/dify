@@ -82,6 +82,10 @@ def init_llm_node(config: dict) -> LLMNode:
         graph_runtime_state=graph_runtime_state,
     )
 
+    # Initialize node data
+    if "data" in config:
+        node.init_node_data(config["data"])
+
     return node
 
 

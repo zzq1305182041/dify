@@ -7,7 +7,6 @@ const translation = {
     all: 'Alle',
     tools: 'Werkzeuge',
     datasources: 'Datenquellen',
-    triggers: 'Auslöser',
   },
   categorySingle: {
     extension: 'Erweiterung',
@@ -16,7 +15,6 @@ const translation = {
     model: 'Modell',
     tool: 'Werkzeug',
     datasource: 'Datenquelle',
-    trigger: 'Auslöser',
   },
   list: {
     source: {
@@ -47,7 +45,6 @@ const translation = {
       checkUpdate: 'Update prüfen',
       update: 'Aktualisieren',
       viewDetail: 'Im Detail sehen',
-      back: 'Zurück',
     },
     toolSelector: {
       paramsTip1: 'Steuert LLM-Inferenzparameter.',
@@ -341,12 +338,6 @@ const translation = {
       'Nur die folgenden {{num}} Plugins werden automatisch aktualisiert',
     specifyPluginsToUpdate: 'Geben Sie die zu aktualisierenden Plugins an',
     updateSettings: 'Einstellungen aktualisieren',
-  },
-  readmeInfo: {
-    title: 'LIESMICH',
-    needHelpCheckReadme: 'Brauchst du Hilfe? Sieh dir die README an.',
-    noReadmeAvailable: 'Keine README verfügbar',
-    failedToFetch: 'README konnte nicht abgerufen werden',
   },
 }
 

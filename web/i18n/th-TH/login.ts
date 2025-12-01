@@ -120,7 +120,6 @@ const translation = {
     verifyMail: 'โปรดดำเนินการต่อด้วยรหัสการตรวจสอบ',
     haveAccount: 'มีบัญชีอยู่แล้วใช่ไหม?',
   },
-  pageTitleForE: 'เฮ้ เรามาเริ่มกันเถอะ!',
 }
 
 export default translation

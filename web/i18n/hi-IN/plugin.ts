@@ -7,7 +7,6 @@ const translation = {
     tools: 'उपकरण',
     agents: 'एजेंट रणनीतियाँ',
     datasources: 'डेटा स्रोत',
-    triggers: 'ट्रिगर्स',
   },
   categorySingle: {
     extension: 'विस्तार',
@@ -16,7 +15,6 @@ const translation = {
     agent: 'एजेंट रणनीति',
     model: 'मॉडल',
     datasource: 'डेटा स्रोत',
-    trigger: 'ट्रिगर',
   },
   list: {
     source: {
@@ -47,7 +45,6 @@ const translation = {
       install: 'स्थापित करें',
       detail: 'विवरण',
       update: 'अपडेट',
-      back: 'वापस',
     },
     toolSelector: {
       uninstalledTitle: 'उपकरण स्थापित नहीं है',
@@ -338,12 +335,6 @@ const translation = {
       'समय क्षेत्र बदलने के लिए, <setTimezone>सेटिंग्स</setTimezone> पर जाएं',
     excludeUpdate:
       'निम्नलिखित {{num}} प्लगइन्स स्वचालित रूप से अपडेट नहीं होंगे',
-  },
-  readmeInfo: {
-    title: 'पढ़ें मुझे',
-    needHelpCheckReadme: 'मदद चाहिए? README देखें।',
-    noReadmeAvailable: 'कोई README उपलब्ध नहीं है',
-    failedToFetch: 'README लाने में असफल',
   },
 }
 

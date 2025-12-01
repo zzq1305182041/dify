@@ -4,7 +4,7 @@ from flask import request
 from flask_restx import Resource, fields, marshal, marshal_with, reqparse
 
 from controllers.common.errors import NoFileUploadedError, TooManyFilesError
-from controllers.console import console_ns
+from controllers.console import api, console_ns
 from controllers.console.wraps import (
     account_initialization_required,
     cloud_edition_billing_resource_check,
@@ -15,20 +15,18 @@ from extensions.ext_redis import redis_client
 from fields.annotation_fields import (
     annotation_fields,
     annotation_hit_history_fields,
-    build_annotation_model,
 )
-from libs.helper import uuid_value
 from libs.login import login_required
 from services.annotation_service import AppAnnotationService
 
 
 @console_ns.route("/apps/<uuid:app_id>/annotation-reply/<string:action>")
 class AnnotationReplyActionApi(Resource):
-    @console_ns.doc("annotation_reply_action")
-    @console_ns.doc(description="Enable or disable annotation reply for an app")
-    @console_ns.doc(params={"app_id": "Application ID", "action": "Action to perform (enable/disable)"})
-    @console_ns.expect(
-        console_ns.model(
+    @api.doc("annotation_reply_action")
+    @api.doc(description="Enable or disable annotation reply for an app")
+    @api.doc(params={"app_id": "Application ID", "action": "Action to perform (enable/disable)"})
+    @api.expect(
+        api.model(
             "AnnotationReplyActionRequest",
             {
                 "score_threshold": fields.Float(required=True, description="Score threshold for annotation matching"),
@@ -37,8 +35,8 @@ class AnnotationReplyActionApi(Resource):
             },
         )
     )
-    @console_ns.response(200, "Action completed successfully")
-    @console_ns.response(403, "Insufficient permissions")
+    @api.response(200, "Action completed successfully")
+    @api.response(403, "Insufficient permissions")
     @setup_required
     @login_required
     @account_initialization_required
@@ -62,11 +60,11 @@ class AnnotationReplyActionApi(Resource):
 
 @console_ns.route("/apps/<uuid:app_id>/annotation-setting")
 class AppAnnotationSettingDetailApi(Resource):
-    @console_ns.doc("get_annotation_setting")
-    @console_ns.doc(description="Get annotation settings for an app")
-    @console_ns.doc(params={"app_id": "Application ID"})
-    @console_ns.response(200, "Annotation settings retrieved successfully")
-    @console_ns.response(403, "Insufficient permissions")
+    @api.doc("get_annotation_setting")
+    @api.doc(description="Get annotation settings for an app")
+    @api.doc(params={"app_id": "Application ID"})
+    @api.response(200, "Annotation settings retrieved successfully")
+    @api.response(403, "Insufficient permissions")
     @setup_required
     @login_required
     @account_initialization_required
@@ -79,11 +77,11 @@ class AppAnnotationSettingDetailApi(Resource):
 
 @console_ns.route("/apps/<uuid:app_id>/annotation-settings/<uuid:annotation_setting_id>")
 class AppAnnotationSettingUpdateApi(Resource):
-    @console_ns.doc("update_annotation_setting")
-    @console_ns.doc(description="Update annotation settings for an app")
-    @console_ns.doc(params={"app_id": "Application ID", "annotation_setting_id": "Annotation setting ID"})
-    @console_ns.expect(
-        console_ns.model(
+    @api.doc("update_annotation_setting")
+    @api.doc(description="Update annotation settings for an app")
+    @api.doc(params={"app_id": "Application ID", "annotation_setting_id": "Annotation setting ID"})
+    @api.expect(
+        api.model(
             "AnnotationSettingUpdateRequest",
             {
                 "score_threshold": fields.Float(required=True, description="Score threshold"),
@@ -92,8 +90,8 @@ class AppAnnotationSettingUpdateApi(Resource):
             },
         )
     )
-    @console_ns.response(200, "Settings updated successfully")
-    @console_ns.response(403, "Insufficient permissions")
+    @api.response(200, "Settings updated successfully")
+    @api.response(403, "Insufficient permissions")
     @setup_required
     @login_required
     @account_initialization_required
@@ -111,11 +109,11 @@ class AppAnnotationSettingUpdateApi(Resource):
 
 @console_ns.route("/apps/<uuid:app_id>/annotation-reply/<string:action>/status/<uuid:job_id>")
 class AnnotationReplyActionStatusApi(Resource):
-    @console_ns.doc("get_annotation_reply_action_status")
-    @console_ns.doc(description="Get status of annotation reply action job")
-    @console_ns.doc(params={"app_id": "Application ID", "job_id": "Job ID", "action": "Action type"})
-    @console_ns.response(200, "Job status retrieved successfully")
-    @console_ns.response(403, "Insufficient permissions")
+    @api.doc("get_annotation_reply_action_status")
+    @api.doc(description="Get status of annotation reply action job")
+    @api.doc(params={"app_id": "Application ID", "job_id": "Job ID", "action": "Action type"})
+    @api.response(200, "Job status retrieved successfully")
+    @api.response(403, "Insufficient permissions")
     @setup_required
     @login_required
     @account_initialization_required
@@ -139,17 +137,17 @@ class AnnotationReplyActionStatusApi(Resource):
 
 @console_ns.route("/apps/<uuid:app_id>/annotations")
 class AnnotationApi(Resource):
-    @console_ns.doc("list_annotations")
-    @console_ns.doc(description="Get annotations for an app with pagination")
-    @console_ns.doc(params={"app_id": "Application ID"})
-    @console_ns.expect(
-        console_ns.parser()
+    @api.doc("list_annotations")
+    @api.doc(description="Get annotations for an app with pagination")
+    @api.doc(params={"app_id": "Application ID"})
+    @api.expect(
+        api.parser()
         .add_argument("page", type=int, location="args", default=1, help="Page number")
         .add_argument("limit", type=int, location="args", default=20, help="Page size")
         .add_argument("keyword", type=str, location="args", default="", help="Search keyword")
     )
-    @console_ns.response(200, "Annotations retrieved successfully")
-    @console_ns.response(403, "Insufficient permissions")
+    @api.response(200, "Annotations retrieved successfully")
+    @api.response(403, "Insufficient permissions")
     @setup_required
     @login_required
     @account_initialization_required
@@ -170,23 +168,21 @@ class AnnotationApi(Resource):
         }
         return response, 200
 
-    @console_ns.doc("create_annotation")
-    @console_ns.doc(description="Create a new annotation for an app")
-    @console_ns.doc(params={"app_id": "Application ID"})
-    @console_ns.expect(
-        console_ns.model(
+    @api.doc("create_annotation")
+    @api.doc(description="Create a new annotation for an app")
+    @api.doc(params={"app_id": "Application ID"})
+    @api.expect(
+        api.model(
             "CreateAnnotationRequest",
             {
-                "message_id": fields.String(description="Message ID (optional)"),
-                "question": fields.String(description="Question text (required when message_id not provided)"),
-                "answer": fields.String(description="Answer text (use 'answer' or 'content')"),
-                "content": fields.String(description="Content text (use 'answer' or 'content')"),
+                "question": fields.String(required=True, description="Question text"),
+                "answer": fields.String(required=True, description="Answer text"),
                 "annotation_reply": fields.Raw(description="Annotation reply data"),
             },
         )
     )
-    @console_ns.response(201, "Annotation created successfully", build_annotation_model(console_ns))
-    @console_ns.response(403, "Insufficient permissions")
+    @api.response(201, "Annotation created successfully", annotation_fields)
+    @api.response(403, "Insufficient permissions")
     @setup_required
     @login_required
     @account_initialization_required
@@ -197,14 +193,11 @@ class AnnotationApi(Resource):
         app_id = str(app_id)
         parser = (
             reqparse.RequestParser()
-            .add_argument("message_id", required=False, type=uuid_value, location="json")
-            .add_argument("question", required=False, type=str, location="json")
-            .add_argument("answer", required=False, type=str, location="json")
-            .add_argument("content", required=False, type=str, location="json")
-            .add_argument("annotation_reply", required=False, type=dict, location="json")
+            .add_argument("question", required=True, type=str, location="json")
+            .add_argument("answer", required=True, type=str, location="json")
         )
         args = parser.parse_args()
-        annotation = AppAnnotationService.up_insert_app_annotation_from_message(args, app_id)
+        annotation = AppAnnotationService.insert_app_annotation_directly(args, app_id)
         return annotation
 
     @setup_required
@@ -236,15 +229,11 @@ class AnnotationApi(Resource):
 
 @console_ns.route("/apps/<uuid:app_id>/annotations/export")
 class AnnotationExportApi(Resource):
-    @console_ns.doc("export_annotations")
-    @console_ns.doc(description="Export all annotations for an app")
-    @console_ns.doc(params={"app_id": "Application ID"})
-    @console_ns.response(
-        200,
-        "Annotations exported successfully",
-        console_ns.model("AnnotationList", {"data": fields.List(fields.Nested(build_annotation_model(console_ns)))}),
-    )
-    @console_ns.response(403, "Insufficient permissions")
+    @api.doc("export_annotations")
+    @api.doc(description="Export all annotations for an app")
+    @api.doc(params={"app_id": "Application ID"})
+    @api.response(200, "Annotations exported successfully", fields.List(fields.Nested(annotation_fields)))
+    @api.response(403, "Insufficient permissions")
     @setup_required
     @login_required
     @account_initialization_required
@@ -256,22 +245,14 @@ class AnnotationExportApi(Resource):
         return response, 200
 
 
-parser = (
-    reqparse.RequestParser()
-    .add_argument("question", required=True, type=str, location="json")
-    .add_argument("answer", required=True, type=str, location="json")
-)
-
-
 @console_ns.route("/apps/<uuid:app_id>/annotations/<uuid:annotation_id>")
 class AnnotationUpdateDeleteApi(Resource):
-    @console_ns.doc("update_delete_annotation")
-    @console_ns.doc(description="Update or delete an annotation")
-    @console_ns.doc(params={"app_id": "Application ID", "annotation_id": "Annotation ID"})
-    @console_ns.response(200, "Annotation updated successfully", build_annotation_model(console_ns))
-    @console_ns.response(204, "Annotation deleted successfully")
-    @console_ns.response(403, "Insufficient permissions")
-    @console_ns.expect(parser)
+    @api.doc("update_delete_annotation")
+    @api.doc(description="Update or delete an annotation")
+    @api.doc(params={"app_id": "Application ID", "annotation_id": "Annotation ID"})
+    @api.response(200, "Annotation updated successfully", annotation_fields)
+    @api.response(204, "Annotation deleted successfully")
+    @api.response(403, "Insufficient permissions")
     @setup_required
     @login_required
     @account_initialization_required
@@ -281,6 +262,11 @@ class AnnotationUpdateDeleteApi(Resource):
     def post(self, app_id, annotation_id):
         app_id = str(app_id)
         annotation_id = str(annotation_id)
+        parser = (
+            reqparse.RequestParser()
+            .add_argument("question", required=True, type=str, location="json")
+            .add_argument("answer", required=True, type=str, location="json")
+        )
         args = parser.parse_args()
         annotation = AppAnnotationService.update_app_annotation_directly(args, app_id, annotation_id)
         return annotation
@@ -298,12 +284,12 @@ class AnnotationUpdateDeleteApi(Resource):
 
 @console_ns.route("/apps/<uuid:app_id>/annotations/batch-import")
 class AnnotationBatchImportApi(Resource):
-    @console_ns.doc("batch_import_annotations")
-    @console_ns.doc(description="Batch import annotations from CSV file")
-    @console_ns.doc(params={"app_id": "Application ID"})
-    @console_ns.response(200, "Batch import started successfully")
-    @console_ns.response(403, "Insufficient permissions")
-    @console_ns.response(400, "No file uploaded or too many files")
+    @api.doc("batch_import_annotations")
+    @api.doc(description="Batch import annotations from CSV file")
+    @api.doc(params={"app_id": "Application ID"})
+    @api.response(200, "Batch import started successfully")
+    @api.response(403, "Insufficient permissions")
+    @api.response(400, "No file uploaded or too many files")
     @setup_required
     @login_required
     @account_initialization_required
@@ -328,11 +314,11 @@ class AnnotationBatchImportApi(Resource):
 
 @console_ns.route("/apps/<uuid:app_id>/annotations/batch-import-status/<uuid:job_id>")
 class AnnotationBatchImportStatusApi(Resource):
-    @console_ns.doc("get_batch_import_status")
-    @console_ns.doc(description="Get status of batch import job")
-    @console_ns.doc(params={"app_id": "Application ID", "job_id": "Job ID"})
-    @console_ns.response(200, "Job status retrieved successfully")
-    @console_ns.response(403, "Insufficient permissions")
+    @api.doc("get_batch_import_status")
+    @api.doc(description="Get status of batch import job")
+    @api.doc(params={"app_id": "Application ID", "job_id": "Job ID"})
+    @api.response(200, "Job status retrieved successfully")
+    @api.response(403, "Insufficient permissions")
     @setup_required
     @login_required
     @account_initialization_required
@@ -355,27 +341,18 @@ class AnnotationBatchImportStatusApi(Resource):
 
 @console_ns.route("/apps/<uuid:app_id>/annotations/<uuid:annotation_id>/hit-histories")
 class AnnotationHitHistoryListApi(Resource):
-    @console_ns.doc("list_annotation_hit_histories")
-    @console_ns.doc(description="Get hit histories for an annotation")
-    @console_ns.doc(params={"app_id": "Application ID", "annotation_id": "Annotation ID"})
-    @console_ns.expect(
-        console_ns.parser()
+    @api.doc("list_annotation_hit_histories")
+    @api.doc(description="Get hit histories for an annotation")
+    @api.doc(params={"app_id": "Application ID", "annotation_id": "Annotation ID"})
+    @api.expect(
+        api.parser()
         .add_argument("page", type=int, location="args", default=1, help="Page number")
         .add_argument("limit", type=int, location="args", default=20, help="Page size")
     )
-    @console_ns.response(
-        200,
-        "Hit histories retrieved successfully",
-        console_ns.model(
-            "AnnotationHitHistoryList",
-            {
-                "data": fields.List(
-                    fields.Nested(console_ns.model("AnnotationHitHistoryItem", annotation_hit_history_fields))
-                )
-            },
-        ),
+    @api.response(
+        200, "Hit histories retrieved successfully", fields.List(fields.Nested(annotation_hit_history_fields))
     )
-    @console_ns.response(403, "Insufficient permissions")
+    @api.response(403, "Insufficient permissions")
     @setup_required
     @login_required
     @account_initialization_required

@@ -4,7 +4,7 @@ import { RocketLaunchIcon } from '@heroicons/react/20/solid'
 import { Button } from '.'
 
 const meta = {
-  title: 'Base/General/Button',
+  title: 'Base/Button/Button',
   component: Button,
   parameters: {
     layout: 'centered',

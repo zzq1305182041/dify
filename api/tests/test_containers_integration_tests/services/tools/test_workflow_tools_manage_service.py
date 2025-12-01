@@ -257,6 +257,7 @@ class TestWorkflowToolManageService:
 
         # Attempt to create second workflow tool with same name
         second_tool_parameters = self._create_test_workflow_tool_parameters()
+
         with pytest.raises(ValueError) as exc_info:
             WorkflowToolManageService.create_workflow_tool(
                 user_id=account.id,
@@ -308,6 +309,7 @@ class TestWorkflowToolManageService:
 
         # Attempt to create workflow tool with non-existent app
         tool_parameters = self._create_test_workflow_tool_parameters()
+
         with pytest.raises(ValueError) as exc_info:
             WorkflowToolManageService.create_workflow_tool(
                 user_id=account.id,
@@ -363,6 +365,7 @@ class TestWorkflowToolManageService:
                 "required": True,
             }
         ]
+
         # Attempt to create workflow tool with invalid parameters
         with pytest.raises(ValueError) as exc_info:
             WorkflowToolManageService.create_workflow_tool(
@@ -413,6 +416,7 @@ class TestWorkflowToolManageService:
         # Create first workflow tool
         first_tool_name = fake.word()
         first_tool_parameters = self._create_test_workflow_tool_parameters()
+
         WorkflowToolManageService.create_workflow_tool(
             user_id=account.id,
             tenant_id=account.current_tenant.id,
@@ -427,6 +431,7 @@ class TestWorkflowToolManageService:
         # Attempt to create second workflow tool with same app_id but different name
         second_tool_name = fake.word()
         second_tool_parameters = self._create_test_workflow_tool_parameters()
+
         with pytest.raises(ValueError) as exc_info:
             WorkflowToolManageService.create_workflow_tool(
                 user_id=account.id,
@@ -481,6 +486,7 @@ class TestWorkflowToolManageService:
 
         # Attempt to create workflow tool for app without workflow
         tool_parameters = self._create_test_workflow_tool_parameters()
+
         with pytest.raises(ValueError) as exc_info:
             WorkflowToolManageService.create_workflow_tool(
                 user_id=account.id,
@@ -528,6 +534,7 @@ class TestWorkflowToolManageService:
         # Create initial workflow tool
         initial_tool_name = fake.word()
         initial_tool_parameters = self._create_test_workflow_tool_parameters()
+
         WorkflowToolManageService.create_workflow_tool(
             user_id=account.id,
             tenant_id=account.current_tenant.id,
@@ -614,6 +621,7 @@ class TestWorkflowToolManageService:
 
         # Attempt to update non-existent workflow tool
         tool_parameters = self._create_test_workflow_tool_parameters()
+
         with pytest.raises(ValueError) as exc_info:
             WorkflowToolManageService.update_workflow_tool(
                 user_id=account.id,
@@ -663,6 +671,7 @@ class TestWorkflowToolManageService:
         # Create first workflow tool
         first_tool_name = fake.word()
         first_tool_parameters = self._create_test_workflow_tool_parameters()
+
         WorkflowToolManageService.create_workflow_tool(
             user_id=account.id,
             tenant_id=account.current_tenant.id,

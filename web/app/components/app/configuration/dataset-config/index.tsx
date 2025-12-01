@@ -9,11 +9,11 @@ import { v4 as uuid4 } from 'uuid'
 import { useFormattingChangedDispatcher } from '../debug/hooks'
 import FeaturePanel from '../base/feature-panel'
 import OperationBtn from '../base/operation-btn'
-import CardItem from './card-item'
+import CardItem from './card-item/item'
 import ParamsConfig from './params-config'
 import ContextVar from './context-var'
 import ConfigContext from '@/context/debug-configuration'
-import { AppModeEnum } from '@/types/app'
+import { AppType } from '@/types/app'
 import type { DataSet } from '@/models/datasets'
 import {
   getMultipleRetrievalConfig,
@@ -232,7 +232,7 @@ const DatasetConfig: FC = () => {
       draft.metadata_model_config = {
         provider: model.provider,
         name: model.modelId,
-        mode: model.mode || AppModeEnum.CHAT,
+        mode: model.mode || 'chat',
         completion_params: draft.metadata_model_config?.completion_params || { temperature: 0.7 },
       }
     })
@@ -302,7 +302,7 @@ const DatasetConfig: FC = () => {
         />
       </div>
 
-      {mode === AppModeEnum.COMPLETION && dataSet.length > 0 && (
+      {mode === AppType.completion && dataSet.length > 0 && (
         <ContextVar
           value={selectedContextVar?.key}
           options={promptVariablesToSelect}

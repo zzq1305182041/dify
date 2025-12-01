@@ -11,14 +11,12 @@ type Option = {
 type TabSliderProps = {
   className?: string
   value: string
-  itemClassName?: string | ((active: boolean) => string)
   onChange: (v: string) => void
   options: Option[]
 }
 
 const TabSlider: FC<TabSliderProps> = ({
   className,
-  itemClassName,
   value,
   onChange,
   options,
@@ -60,7 +58,6 @@ const TabSlider: FC<TabSliderProps> = ({
             index === activeIndex
               ? 'text-text-primary'
               : 'text-text-tertiary',
-            typeof itemClassName === 'function' ? itemClassName(index === activeIndex) : itemClassName,
           )}
           onClick={() => {
             if (index !== activeIndex) {

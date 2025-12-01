@@ -3,8 +3,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from core.app.entities.app_invoke_entities import InvokeFrom
-from core.plugin.entities.plugin_daemon import CredentialType
-from core.tools.entities.tool_entities import ToolInvokeFrom
+from core.tools.entities.tool_entities import CredentialType, ToolInvokeFrom
 
 
 class ToolRuntime(BaseModel):

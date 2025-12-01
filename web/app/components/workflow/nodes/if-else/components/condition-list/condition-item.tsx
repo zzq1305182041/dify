@@ -42,12 +42,6 @@ import BoolValue from '@/app/components/workflow/panel/chat-variable-panel/compo
 import { getVarType } from '@/app/components/workflow/nodes/_base/components/variable/utils'
 import { useIsChatMode } from '@/app/components/workflow/hooks/use-workflow'
 import useMatchSchemaType from '../../../_base/components/variable/use-match-schema-type'
-import {
-  useAllBuiltInTools,
-  useAllCustomTools,
-  useAllMCPTools,
-  useAllWorkflowTools,
-} from '@/service/use-tools'
 const optionNameI18NPrefix = 'workflow.nodes.ifElse.optionName'
 
 type ConditionItemProps = {
@@ -97,12 +91,15 @@ const ConditionItem = ({
   const [isHovered, setIsHovered] = useState(false)
   const [open, setOpen] = useState(false)
 
-  const { data: buildInTools } = useAllBuiltInTools()
-  const { data: customTools } = useAllCustomTools()
-  const { data: workflowTools } = useAllWorkflowTools()
-  const { data: mcpTools } = useAllMCPTools()
-
   const workflowStore = useWorkflowStore()
+  const {
+    setControlPromptEditorRerenderKey,
+    buildInTools,
+    customTools,
+    mcpTools,
+    workflowTools,
+    dataSourceList,
+  } = workflowStore.getState()
 
   const doUpdateCondition = useCallback((newCondition: Condition) => {
     if (isSubVariableKey)
@@ -216,8 +213,6 @@ const ConditionItem = ({
   const handleVarChange = useCallback((valueSelector: ValueSelector, _varItem: Var) => {
     const {
       conversationVariables,
-      setControlPromptEditorRerenderKey,
-      dataSourceList,
     } = workflowStore.getState()
     const resolvedVarType = getVarType({
       valueSelector,
@@ -225,11 +220,11 @@ const ConditionItem = ({
       availableNodes,
       isChatMode,
       allPluginInfoList: {
-        buildInTools: buildInTools || [],
-        customTools: customTools || [],
-        mcpTools: mcpTools || [],
-        workflowTools: workflowTools || [],
-        dataSourceList: dataSourceList || [],
+        buildInTools,
+        customTools,
+        mcpTools,
+        workflowTools,
+        dataSourceList: dataSourceList ?? [],
       },
       schemaTypeDefinitions,
     })
@@ -246,12 +241,12 @@ const ConditionItem = ({
     })
     doUpdateCondition(newCondition)
     setOpen(false)
-  }, [condition, doUpdateCondition, availableNodes, isChatMode, schemaTypeDefinitions, buildInTools, customTools, mcpTools, workflowTools])
+  }, [condition, doUpdateCondition, availableNodes, isChatMode, setControlPromptEditorRerenderKey, schemaTypeDefinitions])
 
   const showBooleanInput = useMemo(() => {
     if(condition.varType === VarType.boolean)
       return true
-
+    // eslint-disable-next-line sonarjs/prefer-single-boolean-return
     if(condition.varType === VarType.arrayBoolean && [ComparisonOperator.contains, ComparisonOperator.notContains].includes(condition.comparison_operator!))
       return true
     return false

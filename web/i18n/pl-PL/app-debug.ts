@@ -114,6 +114,8 @@ const translation = {
     dataSet: {
       title: 'Kontekst',
       noData: 'Możesz importować wiedzę jako kontekst',
+      words: 'Słowa',
+      textBlocks: 'Bloki tekstu',
       selectTitle: 'Wybierz odniesienie do wiedzy',
       selected: 'Wiedza wybrana',
       noDataSet: 'Nie znaleziono wiedzy',
@@ -275,6 +277,7 @@ const translation = {
   variableTable: {
     key: 'Klucz Zmiennej',
     name: 'Nazwa Pola Wejściowego Użytkownika',
+    optional: 'Opcjonalnie',
     type: 'Typ Wejścia',
     action: 'Akcje',
     typeString: 'String',
@@ -349,7 +352,6 @@ const translation = {
     'localUpload': 'Przesyłanie lokalne',
     'uploadFileTypes': 'Typy przesyłanych plików',
     'maxNumberOfUploads': 'Maksymalna liczba przesyłanych plików',
-    'maxNumberTip': 'Dokument < {{docLimit}}, obraz < {{imgLimit}}, audio < {{audioLimit}}, wideo < {{videoLimit}}',
     'single-file': 'Pojedynczy plik',
     'content': 'Zawartość',
     'multi-files': 'Lista plików',

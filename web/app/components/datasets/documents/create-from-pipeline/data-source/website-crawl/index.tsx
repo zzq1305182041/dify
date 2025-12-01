@@ -26,7 +26,6 @@ import { useShallow } from 'zustand/react/shallow'
 import { useModalContextSelector } from '@/context/modal-context'
 import { useGetDataSourceAuth } from '@/service/use-datasource'
 import { useDocLink } from '@/context/i18n'
-import { ACCOUNT_SETTING_TAB } from '@/app/components/header/account-setting/constants'
 
 const I18N_PREFIX = 'datasetCreation.stepOne.website'
 
@@ -140,7 +139,7 @@ const WebsiteCrawl = ({
 
   const handleSetting = useCallback(() => {
     setShowAccountSettingModal({
-      payload: ACCOUNT_SETTING_TAB.DATA_SOURCE,
+      payload: 'data-source',
     })
   }, [setShowAccountSettingModal])
 

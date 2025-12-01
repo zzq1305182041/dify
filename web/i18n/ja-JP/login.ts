@@ -1,6 +1,5 @@
 const translation = {
   pageTitle: 'Dify にログイン',
-  pageTitleForE: 'はじめましょう！',
   welcome: '👋 ようこそ！まずはログインしてご利用ください。',
   email: 'メールアドレス',
   emailPlaceholder: 'メールアドレスを入力してください',

@@ -81,10 +81,6 @@ const translation = {
     },
     addUrl: 'Thêm URL',
     learnMore: 'Tìm hiểu thêm',
-    sort: {
-      uploadTime: 'Thời gian tải lên',
-      hitCount: 'Số lần truy xuất',
-    },
   },
   metadata: {
     title: 'Siêu dữ liệu',

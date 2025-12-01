@@ -6,7 +6,6 @@ import {
 import Textarea from 'react-textarea-autosize'
 import { useTranslation } from 'react-i18next'
 import Recorder from 'js-audio-recorder'
-import { decode } from 'html-entities'
 import type {
   EnableType,
   OnSend,
@@ -204,7 +203,7 @@ const ChatInputArea = ({
                 className={cn(
                   'body-lg-regular w-full resize-none bg-transparent p-1 leading-6 text-text-primary outline-none',
                 )}
-                placeholder={decode(t('common.chat.inputPlaceholder', { botName }) || '')}
+                placeholder={t('common.chat.inputPlaceholder', { botName }) || ''}
                 autoFocus
                 minRows={1}
                 value={query}

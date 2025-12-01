@@ -149,7 +149,7 @@ class BaseSession(
     messages when entered.
     """
 
-    _response_streams: dict[RequestId, queue.Queue[JSONRPCResponse | JSONRPCError | HTTPStatusError]]
+    _response_streams: dict[RequestId, queue.Queue[JSONRPCResponse | JSONRPCError]]
     _request_id: int
     _in_flight: dict[RequestId, RequestResponder[ReceiveRequestT, SendResultT]]
     _receive_request_type: type[ReceiveRequestT]
@@ -201,14 +201,11 @@ class BaseSession(
                 self._receiver_future.result(timeout=5.0)  # Wait up to 5 seconds
             except TimeoutError:
                 # If the receiver loop is still running after timeout, we'll force shutdown
-                # Cancel the future to interrupt the receiver loop
-                self._receiver_future.cancel()
+                pass
 
         # Shutdown the executor
         if self._executor:
-            # Use non-blocking shutdown to prevent hanging
-            # The receiver thread should have already exited due to the None message in the queue
-            self._executor.shutdown(wait=False)
+            self._executor.shutdown(wait=True)
 
     def send_request(
         self,
@@ -230,7 +227,7 @@ class BaseSession(
         request_id = self._request_id
         self._request_id = request_id + 1
 
-        response_queue: queue.Queue[JSONRPCResponse | JSONRPCError | HTTPStatusError] = queue.Queue()
+        response_queue: queue.Queue[JSONRPCResponse | JSONRPCError] = queue.Queue()
         self._response_streams[request_id] = response_queue
 
         try:
@@ -261,17 +258,11 @@ class BaseSession(
                         message="No response received",
                     )
                 )
-            elif isinstance(response_or_error, HTTPStatusError):
-                # HTTPStatusError from streamable_client with preserved response object
-                if response_or_error.response.status_code == 401:
-                    raise MCPAuthError(response=response_or_error.response)
-                else:
-                    raise MCPConnectionError(
-                        ErrorData(code=response_or_error.response.status_code, message=str(response_or_error))
-                    )
             elif isinstance(response_or_error, JSONRPCError):
                 if response_or_error.error.code == 401:
-                    raise MCPAuthError(message=response_or_error.error.message)
+                    raise MCPAuthError(
+                        ErrorData(code=response_or_error.error.code, message=response_or_error.error.message)
+                    )
                 else:
                     raise MCPConnectionError(
                         ErrorData(code=response_or_error.error.code, message=response_or_error.error.message)
@@ -333,17 +324,13 @@ class BaseSession(
                 if isinstance(message, HTTPStatusError):
                     response_queue = self._response_streams.get(self._request_id - 1)
                     if response_queue is not None:
-                        # For 401 errors, pass the HTTPStatusError directly to preserve response object
-                        if message.response.status_code == 401:
-                            response_queue.put(message)
-                        else:
-                            response_queue.put(
-                                JSONRPCError(
-                                    jsonrpc="2.0",
-                                    id=self._request_id - 1,
-                                    error=ErrorData(code=message.response.status_code, message=message.args[0]),
-                                )
+                        response_queue.put(
+                            JSONRPCError(
+                                jsonrpc="2.0",
+                                id=self._request_id - 1,
+                                error=ErrorData(code=message.response.status_code, message=message.args[0]),
                             )
+                        )
                     else:
                         self._handle_incoming(RuntimeError(f"Received response with an unknown request ID: {message}"))
                 elif isinstance(message, Exception):

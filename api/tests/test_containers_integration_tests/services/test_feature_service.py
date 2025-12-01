@@ -3,7 +3,6 @@ from unittest.mock import patch
 import pytest
 from faker import Faker
 
-from enums.cloud_plan import CloudPlan
 from services.feature_service import FeatureModel, FeatureService, KnowledgeRateLimitModel, SystemFeatureModel
 
 
@@ -174,7 +173,7 @@ class TestFeatureService:
             # Set mock return value inside the patch context
             mock_external_service_dependencies["billing_service"].get_info.return_value = {
                 "enabled": True,
-                "subscription": {"plan": CloudPlan.SANDBOX, "interval": "monthly", "education": False},
+                "subscription": {"plan": "sandbox", "interval": "monthly", "education": False},
                 "members": {"size": 1, "limit": 3},
                 "apps": {"size": 1, "limit": 5},
                 "vector_space": {"size": 1, "limit": 2},
@@ -190,7 +189,7 @@ class TestFeatureService:
             result = FeatureService.get_features(tenant_id)
 
         # Assert: Verify sandbox-specific limitations
-        assert result.billing.subscription.plan == CloudPlan.SANDBOX
+        assert result.billing.subscription.plan == "sandbox"
         assert result.education.activated is False
 
         # Verify sandbox limitations

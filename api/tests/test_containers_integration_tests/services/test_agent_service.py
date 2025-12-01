@@ -852,7 +852,6 @@ class TestAgentService:
         # Add files to message
         from models.model import MessageFile
 
-        assert message.from_account_id is not None
         message_file1 = MessageFile(
             message_id=message.id,
             type=FileType.IMAGE,

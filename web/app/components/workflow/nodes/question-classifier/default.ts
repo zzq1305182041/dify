@@ -3,7 +3,6 @@ import type { QuestionClassifierNodeType } from './types'
 import { genNodeMetaData } from '@/app/components/workflow/utils'
 import { BlockEnum } from '@/app/components/workflow/types'
 import { BlockClassificationEnum } from '@/app/components/workflow/block-selector/types'
-import { AppModeEnum } from '@/types/app'
 
 const i18nPrefix = 'workflow'
 
@@ -19,7 +18,7 @@ const nodeDefault: NodeDefault<QuestionClassifierNodeType> = {
     model: {
       provider: '',
       name: '',
-      mode: AppModeEnum.CHAT,
+      mode: 'chat',
       completion_params: {
         temperature: 0.7,
       },

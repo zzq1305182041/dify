@@ -57,8 +57,3 @@ class ToolProviderID(GenericProviderID):
 class DatasourceProviderID(GenericProviderID):
     def __init__(self, value: str, is_hardcoded: bool = False) -> None:
         super().__init__(value, is_hardcoded)
-
-
-class TriggerProviderID(GenericProviderID):
-    def __init__(self, value: str, is_hardcoded: bool = False) -> None:
-        super().__init__(value, is_hardcoded)

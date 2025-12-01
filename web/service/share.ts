@@ -78,19 +78,18 @@ export const stopChatMessageResponding = async (appId: string, taskId: string, i
   return getAction('post', isInstalledApp)(getUrl(`chat-messages/${taskId}/stop`, isInstalledApp, installedAppId))
 }
 
-export const sendCompletionMessage = async (body: Record<string, any>, { onData, onCompleted, onError, onMessageReplace, getAbortController }: {
+export const sendCompletionMessage = async (body: Record<string, any>, { onData, onCompleted, onError, onMessageReplace }: {
   onData: IOnData
   onCompleted: IOnCompleted
   onError: IOnError
   onMessageReplace: IOnMessageReplace
-  getAbortController?: (abortController: AbortController) => void
 }, isInstalledApp: boolean, installedAppId = '') => {
   return ssePost(getUrl('completion-messages', isInstalledApp, installedAppId), {
     body: {
       ...body,
       response_mode: 'streaming',
     },
-  }, { onData, onCompleted, isPublicAPI: !isInstalledApp, onError, onMessageReplace, getAbortController })
+  }, { onData, onCompleted, isPublicAPI: !isInstalledApp, onError, onMessageReplace })
 }
 
 export const sendWorkflowMessage = async (
@@ -145,12 +144,6 @@ export const sendWorkflowMessage = async (
     onTextChunk,
     onTextReplace,
   })
-}
-
-export const stopWorkflowMessage = async (_appId: string, taskId: string, isInstalledApp: boolean, installedAppId = '') => {
-  if (!taskId)
-    return
-  return getAction('post', isInstalledApp)(getUrl(`workflows/tasks/${taskId}/stop`, isInstalledApp, installedAppId))
 }
 
 export const fetchAppInfo = async () => {
@@ -302,8 +295,7 @@ export const fetchAccessToken = async ({ userId, appCode }: { userId?: string, a
   if (accessToken)
     headers.append('Authorization', `Bearer ${accessToken}`)
   const params = new URLSearchParams()
-  if (userId)
-    params.append('user_id', userId)
+  userId && params.append('user_id', userId)
   const url = `/passport?${params.toString()}`
   return get<{ access_token: string }>(url, { headers }) as Promise<{ access_token: string }>
 }

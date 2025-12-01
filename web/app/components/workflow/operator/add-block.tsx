@@ -13,12 +13,10 @@ import {
 } from '../utils'
 import {
   useAvailableBlocks,
-  useIsChatMode,
   useNodesMetaData,
   useNodesReadOnly,
   usePanelInteractions,
 } from '../hooks'
-import { useHooksStore } from '../hooks-store'
 import { useWorkflowStore } from '../store'
 import TipPopup from './tip-popup'
 import cn from '@/utils/classnames'
@@ -29,7 +27,6 @@ import type {
 import {
   BlockEnum,
 } from '@/app/components/workflow/types'
-import { FlowType } from '@/types/common'
 
 type AddBlockProps = {
   renderTrigger?: (open: boolean) => React.ReactNode
@@ -42,14 +39,11 @@ const AddBlock = ({
   const { t } = useTranslation()
   const store = useStoreApi()
   const workflowStore = useWorkflowStore()
-  const isChatMode = useIsChatMode()
   const { nodesReadOnly } = useNodesReadOnly()
   const { handlePaneContextmenuCancel } = usePanelInteractions()
   const [open, setOpen] = useState(false)
   const { availableNextBlocks } = useAvailableBlocks(BlockEnum.Start, false)
   const { nodesMap: nodesMetaDataMap } = useNodesMetaData()
-  const flowType = useHooksStore(s => s.configsMap?.flowType)
-  const showStartTab = flowType !== FlowType.ragPipeline && !isChatMode
 
   const handleOpenChange = useCallback((open: boolean) => {
     setOpen(open)
@@ -57,7 +51,7 @@ const AddBlock = ({
       handlePaneContextmenuCancel()
   }, [handlePaneContextmenuCancel])
 
-  const handleSelect = useCallback<OnSelectBlock>((type, pluginDefaultValue) => {
+  const handleSelect = useCallback<OnSelectBlock>((type, toolDefaultValue) => {
     const {
       getNodes,
     } = store.getState()
@@ -71,7 +65,7 @@ const AddBlock = ({
       data: {
         ...(defaultValue as any),
         title: nodesWithSameType.length > 0 ? `${defaultValue.title} ${nodesWithSameType.length + 1}` : defaultValue.title,
-        ...pluginDefaultValue,
+        ...toolDefaultValue,
         _isCandidate: true,
       },
       position: {
@@ -114,7 +108,6 @@ const AddBlock = ({
       trigger={renderTrigger || renderTriggerElement}
       popupClassName='!min-w-[256px]'
       availableBlocksTypes={availableNextBlocks}
-      showStartTab={showStartTab}
     />
   )
 }

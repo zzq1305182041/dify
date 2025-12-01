@@ -65,12 +65,10 @@ export const useMarketplacePlugins = () => {
   } = useMutationPluginsFromMarketplace()
 
   const [prevPlugins, setPrevPlugins] = useState<Plugin[] | undefined>()
-
   const resetPlugins = useCallback(() => {
     reset()
     setPrevPlugins(undefined)
   }, [reset])
-
   const handleUpdatePlugins = useCallback((pluginsSearchParams: PluginsSearchParams) => {
     mutateAsync(pluginsSearchParams).then((res) => {
       const currentPage = pluginsSearchParams.page || 1
@@ -87,6 +85,9 @@ export const useMarketplacePlugins = () => {
       }
     })
   }, [mutateAsync])
+  const queryPlugins = useCallback((pluginsSearchParams: PluginsSearchParams) => {
+    handleUpdatePlugins(pluginsSearchParams)
+  }, [handleUpdatePlugins])
 
   const { run: queryPluginsWithDebounced, cancel: cancelQueryPluginsWithDebounced } = useDebounceFn((pluginsSearchParams: PluginsSearchParams) => {
     handleUpdatePlugins(pluginsSearchParams)
@@ -98,7 +99,7 @@ export const useMarketplacePlugins = () => {
     plugins: prevPlugins,
     total: data?.data?.total,
     resetPlugins,
-    queryPlugins: handleUpdatePlugins,
+    queryPlugins,
     queryPluginsWithDebounced,
     cancelQueryPluginsWithDebounced,
     isLoading: isPending,

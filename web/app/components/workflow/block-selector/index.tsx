@@ -40,8 +40,8 @@ const NodeSelectorWrapper = (props: NodeSelectorProps) => {
   return (
     <NodeSelector
       {...props}
-      blocks={props.blocks || blocks}
-      dataSources={props.dataSources || dataSourceList || []}
+      blocks={blocks}
+      dataSources={dataSourceList || []}
     />
   )
 }

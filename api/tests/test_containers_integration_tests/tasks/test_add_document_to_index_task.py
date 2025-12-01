@@ -256,7 +256,7 @@ class TestAddDocumentToIndexTask:
         """
         # Arrange: Use non-existent document ID
         fake = Faker()
-        non_existent_id = str(fake.uuid4())
+        non_existent_id = fake.uuid4()
 
         # Act: Execute the task with non-existent document
         add_document_to_index_task(non_existent_id)
@@ -282,7 +282,7 @@ class TestAddDocumentToIndexTask:
         - Redis cache key not affected
         """
         # Arrange: Create test data with invalid indexing status
-        _, document = self._create_test_dataset_and_document(
+        dataset, document = self._create_test_dataset_and_document(
             db_session_with_containers, mock_external_service_dependencies
         )
 
@@ -417,15 +417,15 @@ class TestAddDocumentToIndexTask:
             # Verify redis cache was cleared
             assert redis_client.exists(indexing_cache_key) == 0
 
-    def test_add_document_to_index_with_already_enabled_segments(
+    def test_add_document_to_index_with_no_segments_to_process(
         self, db_session_with_containers, mock_external_service_dependencies
     ):
         """
-        Test document indexing when segments are already enabled.
+        Test document indexing when no segments need processing.
 
         This test verifies:
-        - Segments with status="completed" are processed regardless of enabled status
-        - Index processing occurs with all completed segments
+        - Proper handling when all segments are already enabled
+        - Index processing still occurs but with empty documents list
         - Auto disable log deletion still occurs
         - Redis cache is cleared
         """
@@ -465,16 +465,15 @@ class TestAddDocumentToIndexTask:
         # Act: Execute the task
         add_document_to_index_task(document.id)
 
-        # Assert: Verify index processing occurred with all completed segments
+        # Assert: Verify index processing occurred but with empty documents list
         mock_external_service_dependencies["index_processor_factory"].assert_called_once_with(IndexType.PARAGRAPH_INDEX)
         mock_external_service_dependencies["index_processor"].load.assert_called_once()
 
-        # Verify the load method was called with all completed segments
-        # (implementation doesn't filter by enabled status, only by status="completed")
+        # Verify the load method was called with empty documents list
         call_args = mock_external_service_dependencies["index_processor"].load.call_args
         assert call_args is not None
         documents = call_args[0][1]  # Second argument should be documents list
-        assert len(documents) == 3  # All completed segments are processed
+        assert len(documents) == 0  # No segments to process
 
         # Verify redis cache was cleared
         assert redis_client.exists(indexing_cache_key) == 0
@@ -500,13 +499,13 @@ class TestAddDocumentToIndexTask:
         # Create some auto disable log entries
         fake = Faker()
         auto_disable_logs = []
-        for _ in range(2):
+        for i in range(2):
             log_entry = DatasetAutoDisableLog(
+                id=fake.uuid4(),
                 tenant_id=document.tenant_id,
                 dataset_id=dataset.id,
                 document_id=document.id,
             )
-            log_entry.id = str(fake.uuid4())
             db.session.add(log_entry)
             auto_disable_logs.append(log_entry)
 
@@ -596,11 +595,9 @@ class TestAddDocumentToIndexTask:
         Test segment filtering with various edge cases.
 
         This test verifies:
-        - Only segments with status="completed" are processed (regardless of enabled status)
-        - Segments with status!="completed" are NOT processed
+        - Only segments with enabled=False and status="completed" are processed
         - Segments are ordered by position correctly
         - Mixed segment states are handled properly
-        - All segments are updated to enabled=True after processing
         - Redis cache key deletion
         """
         # Arrange: Create test data
@@ -631,8 +628,7 @@ class TestAddDocumentToIndexTask:
         db.session.add(segment1)
         segments.append(segment1)
 
-        # Segment 2: Should be processed (enabled=True, status="completed")
-        # Note: Implementation doesn't filter by enabled status, only by status="completed"
+        # Segment 2: Should NOT be processed (enabled=True, status="completed")
         segment2 = DocumentSegment(
             id=fake.uuid4(),
             tenant_id=document.tenant_id,
@@ -644,7 +640,7 @@ class TestAddDocumentToIndexTask:
             tokens=len(fake.text(max_nb_chars=200).split()) * 2,
             index_node_id="node_1",
             index_node_hash="hash_1",
-            enabled=True,  # Already enabled, but will still be processed
+            enabled=True,  # Already enabled
             status="completed",
             created_by=document.created_by,
         )
@@ -706,14 +702,11 @@ class TestAddDocumentToIndexTask:
         call_args = mock_external_service_dependencies["index_processor"].load.call_args
         assert call_args is not None
         documents = call_args[0][1]  # Second argument should be documents list
-        assert len(documents) == 3  # 3 segments with status="completed" should be processed
+        assert len(documents) == 2  # Only 2 segments should be processed
 
         # Verify correct segments were processed (by position order)
-        # Segments 1, 2, 4 should be processed (positions 0, 1, 3)
-        # Segment 3 is skipped (position 2, status="processing")
-        assert documents[0].metadata["doc_id"] == "node_0"  # segment1, position 0
-        assert documents[1].metadata["doc_id"] == "node_1"  # segment2, position 1
-        assert documents[2].metadata["doc_id"] == "node_3"  # segment4, position 3
+        assert documents[0].metadata["doc_id"] == "node_0"  # position 0
+        assert documents[1].metadata["doc_id"] == "node_3"  # position 3
 
         # Verify database state changes
         db.session.refresh(document)
@@ -724,7 +717,7 @@ class TestAddDocumentToIndexTask:
 
         # All segments should be enabled because the task updates ALL segments for the document
         assert segment1.enabled is True
-        assert segment2.enabled is True  # Was already enabled, stays True
+        assert segment2.enabled is True  # Was already enabled, now updated to True
         assert segment3.enabled is True  # Was not processed but still updated to True
         assert segment4.enabled is True
 

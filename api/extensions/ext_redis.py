@@ -10,6 +10,7 @@ from redis import RedisError
 from redis.cache import CacheConfig
 from redis.cluster import ClusterNode, RedisCluster
 from redis.connection import Connection, SSLConnection
+from redis.lock import Lock
 from redis.sentinel import Sentinel
 
 from configs import dify_config

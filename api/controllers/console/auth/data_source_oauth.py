@@ -3,11 +3,11 @@ import logging
 import httpx
 from flask import current_app, redirect, request
 from flask_restx import Resource, fields
+from werkzeug.exceptions import Forbidden
 
 from configs import dify_config
-from controllers.console import console_ns
-from controllers.console.wraps import is_admin_or_owner_required
-from libs.login import login_required
+from controllers.console import api, console_ns
+from libs.login import current_account_with_tenant, login_required
 from libs.oauth_data_source import NotionOAuth
 
 from ..wraps import account_initialization_required, setup_required
@@ -29,22 +29,24 @@ def get_oauth_providers():
 
 @console_ns.route("/oauth/data-source/<string:provider>")
 class OAuthDataSource(Resource):
-    @console_ns.doc("oauth_data_source")
-    @console_ns.doc(description="Get OAuth authorization URL for data source provider")
-    @console_ns.doc(params={"provider": "Data source provider name (notion)"})
-    @console_ns.response(
+    @api.doc("oauth_data_source")
+    @api.doc(description="Get OAuth authorization URL for data source provider")
+    @api.doc(params={"provider": "Data source provider name (notion)"})
+    @api.response(
         200,
         "Authorization URL or internal setup success",
-        console_ns.model(
+        api.model(
             "OAuthDataSourceResponse",
             {"data": fields.Raw(description="Authorization URL or 'internal' for internal setup")},
         ),
     )
-    @console_ns.response(400, "Invalid provider")
-    @console_ns.response(403, "Admin privileges required")
-    @is_admin_or_owner_required
+    @api.response(400, "Invalid provider")
+    @api.response(403, "Admin privileges required")
     def get(self, provider: str):
         # The role of the current user in the table must be admin or owner
+        current_user, _ = current_account_with_tenant()
+        if not current_user.is_admin_or_owner:
+            raise Forbidden()
         OAUTH_DATASOURCE_PROVIDERS = get_oauth_providers()
         with current_app.app_context():
             oauth_provider = OAUTH_DATASOURCE_PROVIDERS.get(provider)
@@ -63,17 +65,17 @@ class OAuthDataSource(Resource):
 
 @console_ns.route("/oauth/data-source/callback/<string:provider>")
 class OAuthDataSourceCallback(Resource):
-    @console_ns.doc("oauth_data_source_callback")
-    @console_ns.doc(description="Handle OAuth callback from data source provider")
-    @console_ns.doc(
+    @api.doc("oauth_data_source_callback")
+    @api.doc(description="Handle OAuth callback from data source provider")
+    @api.doc(
         params={
             "provider": "Data source provider name (notion)",
             "code": "Authorization code from OAuth provider",
             "error": "Error message from OAuth provider",
         }
     )
-    @console_ns.response(302, "Redirect to console with result")
-    @console_ns.response(400, "Invalid provider")
+    @api.response(302, "Redirect to console with result")
+    @api.response(400, "Invalid provider")
     def get(self, provider: str):
         OAUTH_DATASOURCE_PROVIDERS = get_oauth_providers()
         with current_app.app_context():
@@ -94,17 +96,17 @@ class OAuthDataSourceCallback(Resource):
 
 @console_ns.route("/oauth/data-source/binding/<string:provider>")
 class OAuthDataSourceBinding(Resource):
-    @console_ns.doc("oauth_data_source_binding")
-    @console_ns.doc(description="Bind OAuth data source with authorization code")
-    @console_ns.doc(
+    @api.doc("oauth_data_source_binding")
+    @api.doc(description="Bind OAuth data source with authorization code")
+    @api.doc(
         params={"provider": "Data source provider name (notion)", "code": "Authorization code from OAuth provider"}
     )
-    @console_ns.response(
+    @api.response(
         200,
         "Data source binding success",
-        console_ns.model("OAuthDataSourceBindingResponse", {"result": fields.String(description="Operation result")}),
+        api.model("OAuthDataSourceBindingResponse", {"result": fields.String(description="Operation result")}),
     )
-    @console_ns.response(400, "Invalid provider or code")
+    @api.response(400, "Invalid provider or code")
     def get(self, provider: str):
         OAUTH_DATASOURCE_PROVIDERS = get_oauth_providers()
         with current_app.app_context():
@@ -128,15 +130,15 @@ class OAuthDataSourceBinding(Resource):
 
 @console_ns.route("/oauth/data-source/<string:provider>/<uuid:binding_id>/sync")
 class OAuthDataSourceSync(Resource):
-    @console_ns.doc("oauth_data_source_sync")
-    @console_ns.doc(description="Sync data from OAuth data source")
-    @console_ns.doc(params={"provider": "Data source provider name (notion)", "binding_id": "Data source binding ID"})
-    @console_ns.response(
+    @api.doc("oauth_data_source_sync")
+    @api.doc(description="Sync data from OAuth data source")
+    @api.doc(params={"provider": "Data source provider name (notion)", "binding_id": "Data source binding ID"})
+    @api.response(
         200,
         "Data source sync success",
-        console_ns.model("OAuthDataSourceSyncResponse", {"result": fields.String(description="Operation result")}),
+        api.model("OAuthDataSourceSyncResponse", {"result": fields.String(description="Operation result")}),
     )
-    @console_ns.response(400, "Invalid provider or sync failed")
+    @api.response(400, "Invalid provider or sync failed")
     @setup_required
     @login_required
     @account_initialization_required

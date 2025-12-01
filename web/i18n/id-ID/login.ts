@@ -120,7 +120,6 @@ const translation = {
     noAccount: 'Tidak punya akun?',
     welcome: '👋 Selamat datang! Silakan isi detail untuk memulai.',
   },
-  pageTitleForE: 'Hei, ayo kita mulai!',
 }
 
 export default translation

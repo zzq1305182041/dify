@@ -40,9 +40,6 @@ class EasyUITaskState(TaskState):
     """
 
     llm_result: LLMResult
-    first_token_time: float | None = None
-    last_token_time: float | None = None
-    is_streaming_response: bool = False
 
 
 class WorkflowTaskState(TaskState):
@@ -51,9 +48,6 @@ class WorkflowTaskState(TaskState):
     """
 
     answer: str = ""
-    first_token_time: float | None = None
-    last_token_time: float | None = None
-    is_streaming_response: bool = False
 
 
 class StreamEvent(StrEnum):

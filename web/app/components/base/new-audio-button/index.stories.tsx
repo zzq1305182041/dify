@@ -20,7 +20,7 @@ const StoryWrapper = (props: ComponentProps<typeof AudioBtn>) => {
 }
 
 const meta = {
-  title: 'Base/General/NewAudioButton',
+  title: 'Base/Button/NewAudioButton',
   component: AudioBtn,
   tags: ['autodocs'],
   parameters: {

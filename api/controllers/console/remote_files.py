@@ -36,15 +36,12 @@ class RemoteFileInfoApi(Resource):
         }
 
 
-parser_upload = reqparse.RequestParser().add_argument("url", type=str, required=True, help="URL is required")
-
-
 @console_ns.route("/remote-files/upload")
 class RemoteFileUploadApi(Resource):
-    @console_ns.expect(parser_upload)
     @marshal_with(file_fields_with_signed_url)
     def post(self):
-        args = parser_upload.parse_args()
+        parser = reqparse.RequestParser().add_argument("url", type=str, required=True, help="URL is required")
+        args = parser.parse_args()
 
         url = args["url"]
 

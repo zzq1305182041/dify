@@ -11,12 +11,6 @@ import useMatchSchemaType, { getMatchedSchemaType } from '../nodes/_base/compone
 import { toNodeOutputVars } from '../nodes/_base/components/variable/utils'
 import type { SchemaTypeDefinition } from '@/service/use-common'
 import { useCallback } from 'react'
-import {
-  useAllBuiltInTools,
-  useAllCustomTools,
-  useAllMCPTools,
-  useAllWorkflowTools,
-} from '@/service/use-tools'
 
 type Params = {
   flowType: FlowType
@@ -33,17 +27,17 @@ export const useSetWorkflowVarsWithValue = ({
   const invalidateSysVarValues = useInvalidateSysVarValues(flowType, flowId)
   const { handleCancelAllNodeSuccessStatus } = useNodesInteractionsWithoutSync()
   const { schemaTypeDefinitions } = useMatchSchemaType()
-  const { data: buildInTools } = useAllBuiltInTools()
-  const { data: customTools } = useAllCustomTools()
-  const { data: workflowTools } = useAllWorkflowTools()
-  const { data: mcpTools } = useAllMCPTools()
+  const buildInTools = useStore(s => s.buildInTools)
+  const customTools = useStore(s => s.customTools)
+  const workflowTools = useStore(s => s.workflowTools)
+  const mcpTools = useStore(s => s.mcpTools)
   const dataSourceList = useStore(s => s.dataSourceList)
   const allPluginInfoList = {
-    buildInTools: buildInTools || [],
-    customTools: customTools || [],
-    workflowTools: workflowTools || [],
-    mcpTools: mcpTools || [],
-    dataSourceList: dataSourceList || [],
+    buildInTools,
+    customTools,
+    workflowTools,
+    mcpTools,
+    dataSourceList: dataSourceList ?? [],
   }
 
   const setInspectVarsToStore = (inspectVars: VarInInspect[], passedInAllPluginInfoList?: Record<string, ToolWithProvider[]>, passedInSchemaTypeDefinitions?: SchemaTypeDefinition[]) => {

@@ -120,7 +120,6 @@ const translation = {
     verifyMail: 'Tiếp tục với mã xác minh',
     welcome: '👋 Chào mừng! Vui lòng điền vào các chi tiết để bắt đầu.',
   },
-  pageTitleForE: 'Này, hãy bắt đầu nào!',
 }
 
 export default translation

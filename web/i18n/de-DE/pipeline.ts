@@ -28,12 +28,10 @@ const translation = {
       viewDetails: 'Details anzeigen',
       error: 'Während der Ausführung ist ein Fehler aufgetreten',
       loading: 'Verarbeitung... Bitte warten',
-      footerTip: 'Im Testlaufmodus bis zu {{count}} Abschnitte anzeigen',
     },
   },
   ragToolSuggestions: {
     title: 'Vorschläge für die RAG',
-    noRecommendationPlugins: 'Keine empfohlenen Plugins, finde mehr im <CustomLink>Marktplatz</CustomLink>',
   },
 }
 

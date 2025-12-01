@@ -16,7 +16,6 @@ import Title from './title'
 import { useGetDataSourceAuth } from '@/service/use-datasource'
 import Loading from '@/app/components/base/loading'
 import { useDocLink } from '@/context/i18n'
-import { ACCOUNT_SETTING_TAB } from '@/app/components/header/account-setting/constants'
 
 type OnlineDocumentsProps = {
   isInPipeline?: boolean
@@ -121,7 +120,7 @@ const OnlineDocuments = ({
 
   const handleSetting = useCallback(() => {
     setShowAccountSettingModal({
-      payload: ACCOUNT_SETTING_TAB.DATA_SOURCE,
+      payload: 'data-source',
     })
   }, [setShowAccountSettingModal])
 

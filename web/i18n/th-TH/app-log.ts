@@ -19,7 +19,6 @@ const translation = {
       tokens: 'โท เค็น',
       user: 'ผู้ใช้ปลายทางหรือบัญชี',
       version: 'เวอร์ชัน',
-      triggered_from: 'ถูกกระตุ้นโดย',
     },
     pagination: {
       previous: 'ก่อนหน้า',
@@ -66,8 +65,6 @@ const translation = {
       quarterToDate: 'ไตรมาสจนถึงปัจจุบัน',
       yearToDate: 'ปีจนถึงปัจจุบัน',
       allTime: 'ตลอดเวลา',
-      last30days: '30 วันที่ผ่านมา',
-      custom: 'กำหนดเอง',
     },
     annotation: {
       all: 'ทั้งหมด',
@@ -98,15 +95,6 @@ const translation = {
     finalProcessing: 'การประมวลผลขั้นสุดท้าย',
   },
   dateFormat: 'วัน/เดือน/ปี',
-  triggerBy: {
-    debugging: 'การแก้ไขข้อบกพร่อง',
-    appRun: 'เว็บแอป',
-    webhook: 'เว็บฮุค',
-    schedule: 'ตารางเวลา',
-    plugin: 'ปลั๊กอิน',
-    ragPipelineRun: 'กระบวนการ RAG',
-    ragPipelineDebugging: 'การดีบัก RAG',
-  },
 }
 
 export default translation

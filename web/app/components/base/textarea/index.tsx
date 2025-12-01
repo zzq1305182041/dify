@@ -20,7 +20,7 @@ const textareaVariants = cva(
 )
 
 export type TextareaProps = {
-  value: string | number
+  value: string
   disabled?: boolean
   destructive?: boolean
   styleCss?: CSSProperties

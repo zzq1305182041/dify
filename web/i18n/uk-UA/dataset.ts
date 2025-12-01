@@ -20,6 +20,7 @@ const translation = {
   intro5: 'можна створити',
   intro6: ' як автономний плагін індексу ChatGPT для публікації',
   unavailable: 'Недоступно',
+  unavailableTip: 'Модель вбудовування недоступна, необхідно налаштувати модель вбудовування за замовчуванням',
   datasets: 'ЗНАННЯ',
   datasetsApi: 'API',
   retrieval: {
@@ -37,6 +38,8 @@ const translation = {
       recommend: 'Рекомендовано',
     },
     invertedIndex: {
+      title: 'Інвертований індекс',
+      description: 'Інвертований індекс – це структура, яка використовується для ефективного пошуку. Організований за термінами, кожен термін вказує на документи або веб-сторінки, що його містять.',
     },
     change: 'Змінити',
     changeRetrievalMethod: 'Змінити метод пошуку',
@@ -235,10 +238,6 @@ const translation = {
     enabled: 'У службі',
     title: 'Сервісний API',
   },
-  docAllEnabled_one: '{{count}} документ увімкнено',
-  docAllEnabled_other: 'Усі документи {{count}} увімкнено',
-  partialEnabled_one: 'Всього {{count}} документів, доступно {{num}}',
-  partialEnabled_other: 'Всього {{count}} документів, доступно {{num}}',
 }
 
 export default translation

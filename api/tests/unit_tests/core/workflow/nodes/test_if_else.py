@@ -114,6 +114,9 @@ def test_execute_if_else_result_true():
         config=node_config,
     )
 
+    # Initialize node data
+    node.init_node_data(node_config["data"])
+
     # Mock db.session.close()
     db.session.close = MagicMock()
 
@@ -184,6 +187,9 @@ def test_execute_if_else_result_false():
         config=node_config,
     )
 
+    # Initialize node data
+    node.init_node_data(node_config["data"])
+
     # Mock db.session.close()
     db.session.close = MagicMock()
 
@@ -245,6 +251,9 @@ def test_array_file_contains_file_name():
         graph_runtime_state=Mock(),
         config=node_config,
     )
+
+    # Initialize node data
+    node.init_node_data(node_config["data"])
 
     node.graph_runtime_state.variable_pool.get.return_value = ArrayFileSegment(
         value=[
@@ -338,6 +347,7 @@ def test_execute_if_else_boolean_conditions(condition: Condition):
         graph_runtime_state=graph_runtime_state,
         config={"id": "if-else", "data": node_data},
     )
+    node.init_node_data(node_data)
 
     # Mock db.session.close()
     db.session.close = MagicMock()
@@ -407,6 +417,7 @@ def test_execute_if_else_boolean_false_conditions():
             "data": node_data,
         },
     )
+    node.init_node_data(node_data)
 
     # Mock db.session.close()
     db.session.close = MagicMock()
@@ -476,6 +487,7 @@ def test_execute_if_else_boolean_cases_structure():
         graph_runtime_state=graph_runtime_state,
         config={"id": "if-else", "data": node_data},
     )
+    node.init_node_data(node_data)
 
     # Mock db.session.close()
     db.session.close = MagicMock()

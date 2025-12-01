@@ -11,19 +11,19 @@ from libs.helper import StrLen
 from models.model import DifySetup
 from services.account_service import TenantService
 
-from . import console_ns
+from . import api, console_ns
 from .error import AlreadySetupError, InitValidateFailedError
 from .wraps import only_edition_self_hosted
 
 
 @console_ns.route("/init")
 class InitValidateAPI(Resource):
-    @console_ns.doc("get_init_status")
-    @console_ns.doc(description="Get initialization validation status")
-    @console_ns.response(
+    @api.doc("get_init_status")
+    @api.doc(description="Get initialization validation status")
+    @api.response(
         200,
         "Success",
-        model=console_ns.model(
+        model=api.model(
             "InitStatusResponse",
             {"status": fields.String(description="Initialization status", enum=["finished", "not_started"])},
         ),
@@ -35,20 +35,20 @@ class InitValidateAPI(Resource):
             return {"status": "finished"}
         return {"status": "not_started"}
 
-    @console_ns.doc("validate_init_password")
-    @console_ns.doc(description="Validate initialization password for self-hosted edition")
-    @console_ns.expect(
-        console_ns.model(
+    @api.doc("validate_init_password")
+    @api.doc(description="Validate initialization password for self-hosted edition")
+    @api.expect(
+        api.model(
             "InitValidateRequest",
             {"password": fields.String(required=True, description="Initialization password", max_length=30)},
         )
     )
-    @console_ns.response(
+    @api.response(
         201,
         "Success",
-        model=console_ns.model("InitValidateResponse", {"result": fields.String(description="Operation result")}),
+        model=api.model("InitValidateResponse", {"result": fields.String(description="Operation result")}),
     )
-    @console_ns.response(400, "Already setup or validation failed")
+    @api.response(400, "Already setup or validation failed")
     @only_edition_self_hosted
     def post(self):
         """Validate initialization password"""

@@ -20,7 +20,6 @@ import timezone from 'dayjs/plugin/timezone'
 import { useAppContext } from '@/context/app-context'
 import { useRouter } from 'next/navigation'
 import { useProviderContext } from '@/context/provider-context'
-import { ACCOUNT_SETTING_TAB } from '@/app/components/header/account-setting/constants'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -156,7 +155,7 @@ export const useEducationInit = () => {
 
   useEffect(() => {
     if (educationVerifying === 'yes' || educationVerifyAction === EDUCATION_VERIFY_URL_SEARCHPARAMS_ACTION) {
-      setShowAccountSettingModal({ payload: ACCOUNT_SETTING_TAB.BILLING })
+      setShowAccountSettingModal({ payload: 'billing' })
 
       if (educationVerifyAction === EDUCATION_VERIFY_URL_SEARCHPARAMS_ACTION)
         localStorage.setItem(EDUCATION_VERIFYING_LOCALSTORAGE_ITEM, 'yes')

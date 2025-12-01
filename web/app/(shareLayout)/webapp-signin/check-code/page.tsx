@@ -1,7 +1,7 @@
 'use client'
 import { RiArrowLeftLine, RiMailSendFill } from '@remixicon/react'
 import { useTranslation } from 'react-i18next'
-import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useContext } from 'use-context-selector'
 import Countdown from '@/app/components/signin/countdown'
@@ -12,7 +12,6 @@ import { sendWebAppEMailLoginCode, webAppEmailLoginWithCode } from '@/service/co
 import I18NContext from '@/context/i18n'
 import { setWebAppAccessToken, setWebAppPassport } from '@/service/webapp-auth'
 import { fetchAccessToken } from '@/service/share'
-import { useWebAppStore } from '@/context/web-app-context'
 
 export default function CheckCode() {
   const { t } = useTranslation()
@@ -23,9 +22,7 @@ export default function CheckCode() {
   const [code, setVerifyCode] = useState('')
   const [loading, setIsLoading] = useState(false)
   const { locale } = useContext(I18NContext)
-  const codeInputRef = useRef<HTMLInputElement>(null)
   const redirectUrl = searchParams.get('redirect_url')
-  const embeddedUserId = useWebAppStore(s => s.embeddedUserId)
 
   const getAppCodeFromRedirectUrl = useCallback(() => {
     if (!redirectUrl)
@@ -66,10 +63,7 @@ export default function CheckCode() {
       const ret = await webAppEmailLoginWithCode({ email, code, token })
       if (ret.result === 'success') {
         setWebAppAccessToken(ret.data.access_token)
-        const { access_token } = await fetchAccessToken({
-          appCode: appCode!,
-          userId: embeddedUserId || undefined,
-        })
+        const { access_token } = await fetchAccessToken({ appCode: appCode! })
         setWebAppPassport(appCode!, access_token)
         router.replace(decodeURIComponent(redirectUrl))
       }
@@ -79,15 +73,6 @@ export default function CheckCode() {
       setIsLoading(false)
     }
   }
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    verify()
-  }
-
-  useEffect(() => {
-    codeInputRef.current?.focus()
-  }, [])
 
   const resendCode = async () => {
     try {
@@ -117,18 +102,10 @@ export default function CheckCode() {
       </p>
     </div>
 
-    <form onSubmit={handleSubmit}>
+    <form action="">
       <label htmlFor="code" className='system-md-semibold mb-1 text-text-secondary'>{t('login.checkCode.verificationCode')}</label>
-      <Input
-        ref={codeInputRef}
-        id='code'
-        value={code}
-        onChange={e => setVerifyCode(e.target.value)}
-        maxLength={6}
-        className='mt-1'
-        placeholder={t('login.checkCode.verificationCodePlaceholder') || ''}
-      />
-      <Button type='submit' loading={loading} disabled={loading} className='my-3 w-full' variant='primary'>{t('login.checkCode.verify')}</Button>
+      <Input value={code} onChange={e => setVerifyCode(e.target.value)} maxLength={6} className='mt-1' placeholder={t('login.checkCode.verificationCodePlaceholder') || ''} />
+      <Button loading={loading} disabled={loading} className='my-3 w-full' variant='primary' onClick={verify}>{t('login.checkCode.verify')}</Button>
       <Countdown onResend={resendCode} />
     </form>
     <div className='py-2'>

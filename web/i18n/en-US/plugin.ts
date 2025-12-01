@@ -8,7 +8,6 @@ const translation = {
     tools: 'Tools',
     agents: 'Agent Strategies',
     extensions: 'Extensions',
-    triggers: 'Triggers',
     bundles: 'Bundles',
     datasources: 'Data Sources',
   },
@@ -17,7 +16,6 @@ const translation = {
     tool: 'Tool',
     agent: 'Agent Strategy',
     extension: 'Extension',
-    trigger: 'Trigger',
     bundle: 'Bundle',
     datasource: 'Data Source',
   },
@@ -64,7 +62,6 @@ const translation = {
       checkUpdate: 'Check Update',
       viewDetail: 'View Detail',
       remove: 'Remove',
-      back: 'Back',
     },
     actionNum: '{{num}} {{action}} INCLUDED',
     strategyNum: '{{num}} {{strategy}} INCLUDED',
@@ -308,12 +305,6 @@ const translation = {
     unavailable: 'Unavailable',
     connectedWorkspace: 'Connected Workspace',
     emptyAuth: 'Please configure authentication',
-  },
-  readmeInfo: {
-    title: 'README',
-    needHelpCheckReadme: 'Need help? Check the README.',
-    noReadmeAvailable: 'No README available',
-    failedToFetch: 'Failed to fetch README',
   },
 }
 

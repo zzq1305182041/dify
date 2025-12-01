@@ -1,6 +1,6 @@
 'use client'
 import type { FC } from 'react'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useBoolean } from 'ahooks'
 import { ArrowDownIcon } from '@heroicons/react/24/outline'
 import { pick, uniq } from 'lodash-es'
@@ -18,6 +18,7 @@ import BatchAction from './detail/completed/common/batch-action'
 import cn from '@/utils/classnames'
 import Tooltip from '@/app/components/base/tooltip'
 import Toast from '@/app/components/base/toast'
+import type { Item } from '@/app/components/base/select'
 import { asyncRunSafe } from '@/utils'
 import { formatNumber } from '@/utils/format'
 import NotionIcon from '@/app/components/base/notion-icon'
@@ -36,7 +37,6 @@ import EditMetadataBatchModal from '@/app/components/datasets/metadata/edit-meta
 import StatusItem from './status-item'
 import Operations from './operations'
 import { DatasourceType } from '@/models/pipeline'
-import { normalizeStatusForQuery } from '@/app/components/datasets/documents/status-filter'
 
 export const renderTdValue = (value: string | number | null, isEmptyStyle = false) => {
   return (
@@ -66,8 +66,7 @@ type IDocumentListProps = {
   pagination: PaginationProps
   onUpdate: () => void
   onManageMetadata: () => void
-  statusFilterValue: string
-  remoteSortValue: string
+  statusFilter: Item
 }
 
 /**
@@ -82,8 +81,7 @@ const DocumentList: FC<IDocumentListProps> = ({
   pagination,
   onUpdate,
   onManageMetadata,
-  statusFilterValue,
-  remoteSortValue,
+  statusFilter,
 }) => {
   const { t } = useTranslation()
   const { formatTime } = useTimestamp()
@@ -92,13 +90,8 @@ const DocumentList: FC<IDocumentListProps> = ({
   const chunkingMode = datasetConfig?.doc_form
   const isGeneralMode = chunkingMode !== ChunkingMode.parentChild
   const isQAMode = chunkingMode === ChunkingMode.qa
-  const [sortField, setSortField] = useState<'name' | 'word_count' | 'hit_count' | 'created_at' | null>(null)
+  const [sortField, setSortField] = useState<'name' | 'word_count' | 'hit_count' | 'created_at' | null>('created_at')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-
-  useEffect(() => {
-    setSortField(null)
-    setSortOrder('desc')
-  }, [remoteSortValue])
 
   const {
     isShowEditModal,
@@ -116,10 +109,11 @@ const DocumentList: FC<IDocumentListProps> = ({
   const localDocs = useMemo(() => {
     let filteredDocs = documents
 
-    if (statusFilterValue && statusFilterValue !== 'all') {
+    if (statusFilter.value !== 'all') {
       filteredDocs = filteredDocs.filter(doc =>
         typeof doc.display_status === 'string'
-        && normalizeStatusForQuery(doc.display_status) === statusFilterValue,
+        && typeof statusFilter.value === 'string'
+        && doc.display_status.toLowerCase() === statusFilter.value.toLowerCase(),
       )
     }
 
@@ -162,7 +156,7 @@ const DocumentList: FC<IDocumentListProps> = ({
     })
 
     return sortedDocs
-  }, [documents, sortField, sortOrder, statusFilterValue])
+  }, [documents, sortField, sortOrder, statusFilter])
 
   const handleSort = (field: 'name' | 'word_count' | 'hit_count' | 'created_at') => {
     if (sortField === field) {
@@ -285,9 +279,9 @@ const DocumentList: FC<IDocumentListProps> = ({
   }, [])
 
   return (
-    <div className='relative mt-3 flex h-full w-full flex-col'>
-      <div className='relative h-0 grow overflow-x-auto'>
-        <table className={`w-full min-w-[700px] max-w-full border-collapse border-0 text-sm ${s.documentTable}`}>
+    <div className='relative flex h-full w-full flex-col'>
+      <div className='relative grow overflow-x-auto'>
+        <table className={`mt-3 w-full min-w-[700px] max-w-full border-collapse border-0 text-sm ${s.documentTable}`}>
           <thead className="h-8 border-b border-divider-subtle text-xs font-medium uppercase leading-8 text-text-tertiary">
             <tr>
               <td className='w-12'>
@@ -455,7 +449,7 @@ const DocumentList: FC<IDocumentListProps> = ({
       {pagination.total && (
         <Pagination
           {...pagination}
-          className='w-full shrink-0'
+          className='w-full shrink-0 px-0 pb-0'
         />
       )}
 

@@ -1,11 +1,10 @@
-import type { TFunction } from 'i18next'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import {
   categoryKeys,
   tagKeys,
 } from './constants'
-import { PluginCategoryEnum } from './types'
 
 export type Tag = {
   name: string
@@ -52,24 +51,56 @@ type Category = {
   label: string
 }
 
-export const useCategories = (translateFromOut?: TFunction, isSingle?: boolean) => {
+export const useCategories = (translateFromOut?: TFunction) => {
   const { t: translation } = useTranslation()
   const t = translateFromOut || translation
 
   const categories = useMemo(() => {
     return categoryKeys.map((category) => {
-      if (category === PluginCategoryEnum.agent) {
+      if (category === 'agent-strategy') {
         return {
-          name: PluginCategoryEnum.agent,
-          label: isSingle ? t('plugin.categorySingle.agent') : t('plugin.category.agents'),
+          name: 'agent-strategy',
+          label: t('plugin.category.agents'),
         }
       }
       return {
         name: category,
-        label: isSingle ? t(`plugin.categorySingle.${category}`) : t(`plugin.category.${category}s`),
+        label: t(`plugin.category.${category}s`),
       }
     })
-  }, [t, isSingle])
+  }, [t])
+
+  const categoriesMap = useMemo(() => {
+    return categories.reduce((acc, category) => {
+      acc[category.name] = category
+      return acc
+    }, {} as Record<string, Category>)
+  }, [categories])
+
+  return {
+    categories,
+    categoriesMap,
+  }
+}
+
+export const useSingleCategories = (translateFromOut?: TFunction) => {
+  const { t: translation } = useTranslation()
+  const t = translateFromOut || translation
+
+  const categories = useMemo(() => {
+    return categoryKeys.map((category) => {
+      if (category === 'agent-strategy') {
+        return {
+          name: 'agent-strategy',
+          label: t('plugin.categorySingle.agent'),
+        }
+      }
+      return {
+        name: category,
+        label: t(`plugin.categorySingle.${category}`),
+      }
+    })
+  }, [t])
 
   const categoriesMap = useMemo(() => {
     return categories.reduce((acc, category) => {

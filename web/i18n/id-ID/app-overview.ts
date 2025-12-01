@@ -9,7 +9,6 @@ const translation = {
     cloud: {
       trial: {
         description: 'Kuota uji coba disediakan untuk tujuan pengujian Anda. Sebelum kuota uji coba habis, harap siapkan penyedia model Anda sendiri atau beli kuota tambahan.',
-        title: 'Anda sedang menggunakan kuota percobaan {{providerName}}.',
       },
       exhausted: {
         title: 'Kuota uji coba Anda telah habis, silakan atur APIKey Anda.',
@@ -54,7 +53,6 @@ const translation = {
           privacyPolicyPlaceholder: 'Masukkan tautan kebijakan privasi',
           customDisclaimerTip: 'Teks penafian khusus akan ditampilkan di sisi klien, memberikan informasi tambahan tentang aplikasi',
           copyright: 'Hak cipta',
-          privacyPolicyTip: 'Membantu pengunjung memahami data yang dikumpulkan aplikasi, lihat <privacyPolicyLink>Kebijakan Privasi Dify</privacyPolicyLink>.',
         },
         chatColorThemeInverted: 'Terbalik',
         invalidPrivacyPolicy: 'Tautan kebijakan privasi tidak valid. Silakan gunakan tautan valid yang dimulai dengan http atau https',
@@ -113,11 +111,6 @@ const translation = {
       preUseReminder: 'Harap aktifkan aplikasi web sebelum melanjutkan.',
       regenerateNotice: 'Apakah Anda ingin membuat ulang URL publik?',
       explanation: 'Aplikasi web AI siap pakai',
-      enableTooltip: {
-        description: 'Untuk mengaktifkan fitur ini, harap tambahkan node Input Pengguna ke kanvas. (Mungkin sudah ada di draft, berlaku setelah dipublikasikan)',
-        learnMore: 'Pelajari lebih lanjut',
-      },
-      title: 'Aplikasi Web',
     },
     apiInfo: {
       accessibleAddress: 'Titik Akhir API Layanan',
@@ -130,17 +123,6 @@ const translation = {
       running: 'Berjalan',
     },
     title: 'Ikhtisar',
-    triggerInfo: {
-      title: 'Pemicu',
-      explanation: 'Manajemen pemicu alur kerja',
-      triggersAdded: '{{count}} Pemicu ditambahkan',
-      noTriggerAdded: 'Tidak ada pemicu yang ditambahkan',
-      triggerStatusDescription: 'Status node pemicu muncul di sini. (Mungkin sudah ada di draf, berlaku setelah dipublikasikan)',
-      learnAboutTriggers: 'Pelajari tentang Pemicu',
-    },
-    disableTooltip: {
-      triggerMode: 'Fitur {{feature}} tidak didukung dalam mode Node Pemicu.',
-    },
   },
   analysis: {
     totalMessages: {

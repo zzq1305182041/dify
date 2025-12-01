@@ -36,6 +36,7 @@ export type ModelParameterModalProps = {
   popupClassName?: string
   portalToFollowElemContentClassName?: string
   isAdvancedMode: boolean
+  mode: string
   modelId: string
   provider: string
   setModel: (model: { modelId: string; provider: string; mode?: string; features?: string[] }) => void

@@ -16,7 +16,7 @@ import {
 } from '../../../types'
 import type { Node } from '../../../types'
 import BlockSelector from '../../../block-selector'
-import type { PluginDefaultValue } from '../../../block-selector/types'
+import type { DataSourceDefaultValue, ToolDefaultValue } from '../../../block-selector/types'
 import {
   useAvailableBlocks,
   useIsChatMode,
@@ -25,7 +25,6 @@ import {
 } from '../../../hooks'
 import {
   useStore,
-  useWorkflowStore,
 } from '../../../store'
 import cn from '@/utils/classnames'
 
@@ -58,11 +57,11 @@ export const NodeTargetHandle = memo(({
     if (!connected)
       setOpen(v => !v)
   }, [connected])
-  const handleSelect = useCallback((type: BlockEnum, pluginDefaultValue?: PluginDefaultValue) => {
+  const handleSelect = useCallback((type: BlockEnum, toolDefaultValue?: ToolDefaultValue | DataSourceDefaultValue) => {
     handleNodeAdd(
       {
         nodeType: type,
-        pluginDefaultValue,
+        toolDefaultValue,
       },
       {
         nextNodeId: id,
@@ -85,10 +84,7 @@ export const NodeTargetHandle = memo(({
           data._runningStatus === NodeRunningStatus.Failed && 'after:bg-workflow-link-line-error-handle',
           data._runningStatus === NodeRunningStatus.Exception && 'after:bg-workflow-link-line-failure-handle',
           !connected && 'after:opacity-0',
-          (data.type === BlockEnum.Start
-            || data.type === BlockEnum.TriggerWebhook
-            || data.type === BlockEnum.TriggerSchedule
-            || data.type === BlockEnum.TriggerPlugin) && 'opacity-0',
+          data.type === BlockEnum.Start && 'opacity-0',
           handleClassName,
         )}
         isConnectable={isConnectable}
@@ -128,10 +124,7 @@ export const NodeSourceHandle = memo(({
   showExceptionStatus,
 }: NodeHandleProps) => {
   const { t } = useTranslation()
-  const shouldAutoOpenStartNodeSelector = useStore(s => s.shouldAutoOpenStartNodeSelector)
-  const setShouldAutoOpenStartNodeSelector = useStore(s => s.setShouldAutoOpenStartNodeSelector)
-  const setHasSelectedStartNode = useStore(s => s.setHasSelectedStartNode)
-  const workflowStoreApi = useWorkflowStore()
+  const notInitialWorkflow = useStore(s => s.notInitialWorkflow)
   const [open, setOpen] = useState(false)
   const { handleNodeAdd } = useNodesInteractions()
   const { getNodesReadOnly } = useNodesReadOnly()
@@ -147,11 +140,11 @@ export const NodeSourceHandle = memo(({
     e.stopPropagation()
     setOpen(v => !v)
   }, [])
-  const handleSelect = useCallback((type: BlockEnum, pluginDefaultValue?: PluginDefaultValue) => {
+  const handleSelect = useCallback((type: BlockEnum, toolDefaultValue?: ToolDefaultValue | DataSourceDefaultValue) => {
     handleNodeAdd(
       {
         nodeType: type,
-        pluginDefaultValue,
+        toolDefaultValue,
       },
       {
         prevNodeId: id,
@@ -161,27 +154,9 @@ export const NodeSourceHandle = memo(({
   }, [handleNodeAdd, id, handleId])
 
   useEffect(() => {
-    if (!shouldAutoOpenStartNodeSelector)
-      return
-
-    if (isChatMode) {
-      setShouldAutoOpenStartNodeSelector?.(false)
-      return
-    }
-
-    if (data.type === BlockEnum.Start || data.type === BlockEnum.TriggerSchedule || data.type === BlockEnum.TriggerWebhook || data.type === BlockEnum.TriggerPlugin) {
+    if (notInitialWorkflow && data.type === BlockEnum.Start && !isChatMode)
       setOpen(true)
-      if (setShouldAutoOpenStartNodeSelector)
-        setShouldAutoOpenStartNodeSelector(false)
-      else
-        workflowStoreApi?.setState?.({ shouldAutoOpenStartNodeSelector: false })
-
-      if (setHasSelectedStartNode)
-        setHasSelectedStartNode(false)
-      else
-        workflowStoreApi?.setState?.({ hasSelectedStartNode: false })
-    }
-  }, [shouldAutoOpenStartNodeSelector, data.type, isChatMode, setShouldAutoOpenStartNodeSelector, setHasSelectedStartNode, workflowStoreApi])
+  }, [notInitialWorkflow, data.type, isChatMode])
 
   return (
     <Handle

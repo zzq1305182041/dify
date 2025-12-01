@@ -23,7 +23,6 @@ import { CodeAssistant, MagicEdit } from '@/app/components/base/icons/src/vender
 import ManageInputField from './manage-input-field'
 import { VariableIconWithColor } from '@/app/components/workflow/nodes/_base/components/variable/variable-label'
 import { Variable02 } from '@/app/components/base/icons/src/vender/solid/development'
-import { VAR_SHOW_NAME_MAP } from '@/app/components/workflow/constants'
 
 type ItemProps = {
   nodeId: string
@@ -83,14 +82,10 @@ const Item: FC<ItemProps> = ({
   }, [isFlat, isInCodeGeneratorInstructionEditor, itemData.variable])
 
   const varName = useMemo(() => {
-    if(VAR_SHOW_NAME_MAP[itemData.variable])
-      return VAR_SHOW_NAME_MAP[itemData.variable]
-
     if (!isFlat)
       return itemData.variable
     if (itemData.variable === 'current')
       return isInCodeGeneratorInstructionEditor ? 'current_code' : 'current_prompt'
-
     return itemData.variable
   }, [isFlat, isInCodeGeneratorInstructionEditor, itemData.variable])
 
@@ -187,7 +182,6 @@ const Item: FC<ItemProps> = ({
         >
           <div className='flex w-0 grow items-center'>
             {!isFlat && <VariableIconWithColor
-              variables={itemData.variable.split('.')}
               variableCategory={variableCategory}
               isExceptionVariable={isException}
             />}

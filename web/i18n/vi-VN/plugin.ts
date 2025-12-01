@@ -7,7 +7,6 @@ const translation = {
     agents: 'Chiến lược đại lý',
     models: 'Mô hình',
     datasources: 'Nguồn dữ liệu',
-    triggers: 'Kích hoạt',
   },
   categorySingle: {
     agent: 'Chiến lược đại lý',
@@ -16,7 +15,6 @@ const translation = {
     model: 'Mẫu',
     bundle: 'Bó',
     datasource: 'Nguồn dữ liệu',
-    trigger: 'Kích hoạt',
   },
   list: {
     source: {
@@ -47,7 +45,6 @@ const translation = {
       remove: 'Triệt',
       install: 'Cài đặt',
       checkUpdate: 'Kiểm tra cập nhật',
-      back: 'Quay lại',
     },
     toolSelector: {
       descriptionPlaceholder: 'Mô tả ngắn gọn về mục đích của công cụ, ví dụ: lấy nhiệt độ cho một vị trí cụ thể.',
@@ -308,12 +305,6 @@ const translation = {
     updateSettings: 'Cập nhật cài đặt',
     partialUPdate: 'Chỉ có {{num}} plugin sau đây sẽ tự động cập nhật',
     changeTimezone: 'Để thay đổi múi giờ, hãy vào <setTimezone>Cài đặt</setTimezone>',
-  },
-  readmeInfo: {
-    title: 'ĐỌC_TÔI',
-    needHelpCheckReadme: 'Cần giúp đỡ? Xem tệp README.',
-    noReadmeAvailable: 'Không có README',
-    failedToFetch: 'Không thể lấy README',
   },
 }
 

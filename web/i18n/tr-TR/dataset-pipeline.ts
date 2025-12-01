@@ -34,7 +34,6 @@ const translation = {
   publishPipeline: {
     success: {
       message: 'Bilgi İşlem Hattı Yayımlandı',
-      tip: '<CustomLink>Belgeler</CustomLink> bölümüne giderek belgeleri ekleyebilir veya yönetebilirsiniz.',
     },
     error: {
       message: 'Bilgi İşlem Hattı yayımlanamadı',
@@ -57,7 +56,6 @@ const translation = {
   details: {
     structure: 'Yapı',
     structureTooltip: 'Yığın Yapısı, belgelerin nasıl bölündüğünü ve dizine eklendiğini belirler (Genel, Üst-Alt ve Soru-Cevap modları sunar) ve her bilgi bankası için benzersizdir.',
-    createdBy: '{{author}} tarafından',
   },
   testRun: {
     steps: {
@@ -114,32 +112,23 @@ const translation = {
     characters: 'Karakter',
     backToDataSource: 'Veri Kaynağı',
     title: 'Belge Ekle',
-    selectOnlineDocumentTip: 'En fazla {{count}} sayfa işleyin',
-    selectOnlineDriveTip: 'Her biri en fazla {{fileSize}} MB olan {{count}} dosyaya kadar işlem yap',
   },
   documentSettings: {
     title: 'Belge Ayarları',
   },
-  onlineDocument: {
-    pageSelectorTitle: '{{name}} sayfa',
-  },
+  onlineDocument: {},
   onlineDrive: {
     breadcrumbs: {
       allFiles: 'Tüm Dosyalar',
       searchPlaceholder: 'Dosyaları ara...',
       allBuckets: 'Tüm Bulut Depolama Paketleri',
-      searchResult: '{{folderName}} klasöründe {{searchResultsLength}} öğe bulun',
     },
     emptySearchResult: 'Hiçbir öğe bulunamadı',
     resetKeywords: 'Anahtar kelimeleri sıfırlama',
     notSupportedFileType: 'Bu dosya türü desteklenmiyor',
     emptyFolder: 'Bu klasör boş',
-    notConnected: '{{name}} bağlı değil',
-    notConnectedTip: '{{name}} ile senkronize olmak için önce {{name}} bağlantısının kurulması gerekir.',
   },
-  credentialSelector: {
-    name: '{{credentialName}}\'un {{pluginName}}',
-  },
+  credentialSelector: {},
   conversion: {
     confirm: {
       title: 'Onay',
@@ -160,7 +149,6 @@ const translation = {
   pipelineNameAndIcon: 'İşlem hattı adı & simgesi',
   editPipelineInfo: 'İşlem hattı bilgilerini düzenleme',
   knowledgeDescriptionPlaceholder: 'Bu Bilgi Bankasında neler olduğunu açıklayın. Ayrıntılı bir açıklama, yapay zekanın veri kümesinin içeriğine daha doğru bir şekilde erişmesini sağlar. Boşsa, Dify varsayılan isabet stratejisini kullanacaktır. (İsteğe bağlı)',
-  configurationTip: '{{pluginName}}\'yi yapılandır',
 }
 
 export default translation

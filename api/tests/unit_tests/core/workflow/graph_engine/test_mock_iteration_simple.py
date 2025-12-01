@@ -142,8 +142,6 @@ def test_mock_loop_node_preserves_config():
             "start_node_id": "node1",
             "loop_variables": [],
             "outputs": {},
-            "break_conditions": [],
-            "logical_operator": "and",
         },
     }
 

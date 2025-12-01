@@ -1,6 +1,5 @@
 import base64
 import logging
-import pickle
 from typing import Any, cast
 
 import numpy as np
@@ -90,8 +89,8 @@ class CacheEmbedding(Embeddings):
                                 model_name=self._model_instance.model,
                                 hash=hash,
                                 provider_name=self._model_instance.provider,
-                                embedding=pickle.dumps(n_embedding, protocol=pickle.HIGHEST_PROTOCOL),
                             )
+                            embedding_cache.set_embedding(n_embedding)
                             db.session.add(embedding_cache)
                             cache_embeddings.append(hash)
                     db.session.commit()

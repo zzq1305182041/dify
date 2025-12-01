@@ -120,7 +120,6 @@ const translation = {
     welcome: '👋 ¡Bienvenido! Por favor, completa los detalles para comenzar.',
     verifyMail: 'Continuar con el código de verificación',
   },
-  pageTitleForE: '¡Hola, vamos a empezar!',
 }
 
 export default translation

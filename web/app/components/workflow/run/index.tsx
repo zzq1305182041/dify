@@ -5,8 +5,6 @@ import { useContext } from 'use-context-selector'
 import { useTranslation } from 'react-i18next'
 import OutputPanel from './output-panel'
 import ResultPanel from './result-panel'
-import StatusPanel from './status'
-import { WorkflowRunningStatus } from '@/app/components/workflow/types'
 import TracingPanel from './tracing-panel'
 import cn from '@/utils/classnames'
 import { ToastContext } from '@/app/components/base/toast'
@@ -14,8 +12,6 @@ import Loading from '@/app/components/base/loading'
 import { fetchRunDetail, fetchTracingList } from '@/service/log'
 import type { NodeTracing } from '@/types/workflow'
 import type { WorkflowRunDetailResponse } from '@/models/log'
-import { useStore } from '../store'
-
 export type RunProps = {
   hideResult?: boolean
   activeTab?: 'RESULT' | 'DETAIL' | 'TRACING'
@@ -37,7 +33,6 @@ const RunPanel: FC<RunProps> = ({
   const [loading, setLoading] = useState<boolean>(true)
   const [runDetail, setRunDetail] = useState<WorkflowRunDetailResponse>()
   const [list, setList] = useState<NodeTracing[]>([])
-  const isListening = useStore(s => s.isListening)
 
   const executor = useMemo(() => {
     if (runDetail?.created_by_role === 'account')
@@ -93,11 +88,6 @@ const RunPanel: FC<RunProps> = ({
     if (tracingListUrl)
       await getTracingList()
   }
-
-  useEffect(() => {
-    if (isListening)
-      setCurrentTab('DETAIL')
-  }, [isListening])
 
   useEffect(() => {
     // fetch data
@@ -174,13 +164,6 @@ const RunPanel: FC<RunProps> = ({
             created_by={executor}
             steps={runDetail.total_steps}
             exceptionCounts={runDetail.exceptions_count}
-            isListening={isListening}
-          />
-        )}
-        {!loading && currentTab === 'DETAIL' && !runDetail && isListening && (
-          <StatusPanel
-            status={WorkflowRunningStatus.Running}
-            isListening={true}
           />
         )}
         {!loading && currentTab === 'TRACING' && (

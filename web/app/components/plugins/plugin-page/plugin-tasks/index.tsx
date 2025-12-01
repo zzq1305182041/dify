@@ -63,7 +63,7 @@ const PluginTasks = () => {
 
   return (
     <div
-      className={cn('flex items-center', opacity < 0 && 'hidden')}
+      className='flex items-center'
       style={{ opacity }}
     >
       <PortalToFollowElem

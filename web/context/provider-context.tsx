@@ -17,8 +17,7 @@ import {
 } from '@/app/components/header/account-setting/model-provider-page/declarations'
 import type { Model, ModelProvider } from '@/app/components/header/account-setting/model-provider-page/declarations'
 import type { RETRIEVE_METHOD } from '@/types/app'
-import type { Plan, UsageResetInfo } from '@/app/components/billing/type'
-import type { UsagePlanInfo } from '@/app/components/billing/type'
+import { Plan, type UsagePlanInfo } from '@/app/components/billing/type'
 import { fetchCurrentPlanInfo } from '@/service/billing'
 import { parseCurrentPlan } from '@/app/components/billing/utils'
 import { defaultPlan } from '@/app/components/billing/config'
@@ -40,7 +39,6 @@ type ProviderContextState = {
     type: Plan
     usage: UsagePlanInfo
     total: UsagePlanInfo
-    reset: UsageResetInfo
   }
   isFetchedPlan: boolean
   enableBilling: boolean
@@ -72,7 +70,23 @@ const ProviderContext = createContext<ProviderContextState>({
   textGenerationModelList: [],
   supportRetrievalMethods: [],
   isAPIKeySet: true,
-  plan: defaultPlan,
+  plan: {
+    type: Plan.sandbox,
+    usage: {
+      vectorSpace: 32,
+      buildApps: 12,
+      teamMembers: 1,
+      annotatedResponse: 1,
+      documentsUploadQuota: 50,
+    },
+    total: {
+      vectorSpace: 200,
+      buildApps: 50,
+      teamMembers: 1,
+      annotatedResponse: 10,
+      documentsUploadQuota: 500,
+    },
+  },
   isFetchedPlan: false,
   enableBilling: false,
   onPlanInfoChanged: noop,

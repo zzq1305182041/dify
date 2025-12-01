@@ -1,6 +1,6 @@
 import { PLUGIN_TYPE_SEARCH_MAP } from './plugin-type-switch'
 import type { Plugin } from '@/app/components/plugins/types'
-import { PluginCategoryEnum } from '@/app/components/plugins/types'
+import { PluginType } from '@/app/components/plugins/types'
 import type {
   CollectionsAndPluginsSearchParams,
   MarketplaceCollection,
@@ -8,7 +8,6 @@ import type {
 } from '@/app/components/plugins/marketplace/types'
 import {
   APP_VERSION,
-  IS_MARKETPLACE,
   MARKETPLACE_API_PREFIX,
 } from '@/config'
 import { getMarketplaceUrl } from '@/utils/var'
@@ -52,7 +51,7 @@ export const getMarketplacePluginsByCollectionId = async (collectionId: string, 
   try {
     const url = `${MARKETPLACE_API_PREFIX}/collections/${collectionId}/plugins`
     const headers = new Headers({
-      'X-Dify-Version': !IS_MARKETPLACE ? APP_VERSION : '999.0.0',
+      'X-Dify-Version': APP_VERSION,
     })
     const marketplaceCollectionPluginsData = await globalThis.fetch(
       url,
@@ -90,7 +89,7 @@ export const getMarketplaceCollectionsAndPlugins = async (query?: CollectionsAnd
     if (query?.type)
       marketplaceUrl += `&type=${query.type}`
     const headers = new Headers({
-      'X-Dify-Version': !IS_MARKETPLACE ? APP_VERSION : '999.0.0',
+      'X-Dify-Version': APP_VERSION,
     })
     const marketplaceCollectionsData = await globalThis.fetch(marketplaceUrl, { headers, cache: 'no-store' })
     const marketplaceCollectionsDataJson = await marketplaceCollectionsData.json()
@@ -114,11 +113,20 @@ export const getMarketplaceCollectionsAndPlugins = async (query?: CollectionsAnd
 }
 
 export const getMarketplaceListCondition = (pluginType: string) => {
-  if ([PluginCategoryEnum.tool, PluginCategoryEnum.agent, PluginCategoryEnum.model, PluginCategoryEnum.datasource, PluginCategoryEnum.trigger].includes(pluginType as PluginCategoryEnum))
-    return `category=${pluginType}`
+  if (pluginType === PluginType.tool)
+    return 'category=tool'
 
-  if (pluginType === PluginCategoryEnum.extension)
+  if (pluginType === PluginType.agent)
+    return 'category=agent-strategy'
+
+  if (pluginType === PluginType.model)
+    return 'category=model'
+
+  if (pluginType === PluginType.extension)
     return 'category=endpoint'
+
+  if (pluginType === PluginType.datasource)
+    return 'category=datasource'
 
   if (pluginType === 'bundle')
     return 'type=bundle'

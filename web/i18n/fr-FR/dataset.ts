@@ -19,6 +19,7 @@ const translation = {
   intro5: 'peut être créé',
   intro6: 'comme un plug-in d\'index ChatGPT autonome à publier',
   unavailable: 'Indisponible',
+  unavailableTip: 'Le modèle d\'embedding n\'est pas disponible, le modèle d\'embedding par défaut doit être configuré',
   datasets: 'CONNAISSANCE',
   datasetsApi: 'API',
   retrieval: {
@@ -36,6 +37,8 @@ const translation = {
       recommend: 'Recommander',
     },
     invertedIndex: {
+      title: 'Index inversé',
+      description: 'L\'Index inversé est une structure utilisée pour une récupération efficace. Organisé par termes, chaque terme pointe vers des documents ou des pages web le contenant.',
     },
     change: 'Changer',
     changeRetrievalMethod: 'Changer la méthode de récupération',
@@ -234,10 +237,6 @@ const translation = {
     title: 'API de service',
     disabled: 'désactivé',
   },
-  docAllEnabled_one: 'Document {{count}} activé',
-  docAllEnabled_other: 'Tous les documents {{count}} activés',
-  partialEnabled_one: 'Total de {{count}} documents, {{num}} disponibles',
-  partialEnabled_other: 'Total de {{count}} documents, {{num}} disponibles',
 }
 
 export default translation

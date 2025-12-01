@@ -120,7 +120,6 @@ const translation = {
     createAccount: 'Creează-ți contul',
     welcome: '👋 Buna! Te rugăm să completezi detaliile pentru a începe.',
   },
-  pageTitleForE: 'Hei, hai să începem!',
 }
 
 export default translation

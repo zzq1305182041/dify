@@ -210,24 +210,10 @@ class Tool(ABC):
             meta=meta,
         )
 
-    def create_json_message(self, object: dict, suppress_output: bool = False) -> ToolInvokeMessage:
+    def create_json_message(self, object: dict) -> ToolInvokeMessage:
         """
         create a json message
         """
         return ToolInvokeMessage(
-            type=ToolInvokeMessage.MessageType.JSON,
-            message=ToolInvokeMessage.JsonMessage(json_object=object, suppress_output=suppress_output),
-        )
-
-    def create_variable_message(
-        self, variable_name: str, variable_value: Any, stream: bool = False
-    ) -> ToolInvokeMessage:
-        """
-        create a variable message
-        """
-        return ToolInvokeMessage(
-            type=ToolInvokeMessage.MessageType.VARIABLE,
-            message=ToolInvokeMessage.VariableMessage(
-                variable_name=variable_name, variable_value=variable_value, stream=stream
-            ),
+            type=ToolInvokeMessage.MessageType.JSON, message=ToolInvokeMessage.JsonMessage(json_object=object)
         )

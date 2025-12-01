@@ -1,13 +1,13 @@
 import { memo } from 'react'
-import { headers } from 'next/headers'
+import { type UnsafeUnwrappedHeaders, headers } from 'next/headers'
 import Script from 'next/script'
 import { IS_CE_EDITION, ZENDESK_WIDGET_KEY } from '@/config'
 
-const Zendesk = async () => {
+const Zendesk = () => {
   if (IS_CE_EDITION || !ZENDESK_WIDGET_KEY)
     return null
 
-  const nonce = process.env.NODE_ENV === 'production' ? (await headers()).get('x-nonce') ?? '' : ''
+  const nonce = process.env.NODE_ENV === 'production' ? (headers() as unknown as UnsafeUnwrappedHeaders).get('x-nonce') ?? '' : ''
 
   return (
     <>

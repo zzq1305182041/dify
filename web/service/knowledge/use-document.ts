@@ -9,7 +9,6 @@ import { pauseDocIndexing, resumeDocIndexing } from '../datasets'
 import type { DocumentDetailResponse, DocumentListResponse, UpdateDocumentBatchParams } from '@/models/datasets'
 import { DocumentActionType } from '@/models/datasets'
 import type { CommonResponse } from '@/models/common'
-import { normalizeStatusForQuery } from '@/app/components/datasets/documents/status-filter'
 
 const NAME_SPACE = 'knowledge/document'
 
@@ -21,26 +20,15 @@ export const useDocumentList = (payload: {
     page: number
     limit: number
     sort?: SortType
-    status?: string
   },
   refetchInterval?: number | false
 }) => {
   const { query, datasetId, refetchInterval } = payload
-  const { keyword, page, limit, sort, status } = query
-  const normalizedStatus = normalizeStatusForQuery(status)
-  const params: Record<string, number | string> = {
-    keyword,
-    page,
-    limit,
-  }
-  if (sort)
-    params.sort = sort
-  if (normalizedStatus && normalizedStatus !== 'all')
-    params.status = normalizedStatus
+  const { keyword, page, limit, sort } = query
   return useQuery<DocumentListResponse>({
-    queryKey: [...useDocumentListKey, datasetId, keyword, page, limit, sort, normalizedStatus],
+    queryKey: [...useDocumentListKey, datasetId, keyword, page, limit, sort],
     queryFn: () => get<DocumentListResponse>(`/datasets/${datasetId}/documents`, {
-      params,
+      params: query,
     }),
     refetchInterval,
   })

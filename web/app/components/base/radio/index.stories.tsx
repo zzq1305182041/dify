@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Radio from '.'
 
 const meta = {
-  title: 'Base/Data Entry/Radio',
+  title: 'Base/Input/Radio',
   component: Radio,
   parameters: {
     layout: 'centered',

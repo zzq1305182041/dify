@@ -81,10 +81,6 @@ const translation = {
       error: 'インポートエラー',
       ok: 'OK',
     },
-    sort: {
-      uploadTime: 'アップロード時間',
-      hitCount: '取得回数',
-    },
   },
   metadata: {
     title: 'メタデータ',

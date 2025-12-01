@@ -5,17 +5,15 @@ import { isEmpty } from 'lodash-es'
 export const pluginManifestToCardPluginProps = (pluginManifest: PluginDeclaration): Plugin => {
   return {
     plugin_id: pluginManifest.plugin_unique_identifier,
-    type: pluginManifest.category as Plugin['type'],
+    type: pluginManifest.category,
     category: pluginManifest.category,
     name: pluginManifest.name,
     version: pluginManifest.version,
     latest_version: '',
     latest_package_identifier: '',
     org: pluginManifest.author,
-    author: pluginManifest.author,
     label: pluginManifest.label,
     brief: pluginManifest.description,
-    description: pluginManifest.description,
     icon: pluginManifest.icon,
     verified: pluginManifest.verified,
     introduction: '',
@@ -24,17 +22,14 @@ export const pluginManifestToCardPluginProps = (pluginManifest: PluginDeclaratio
     endpoint: {
       settings: [],
     },
-    tags: pluginManifest.tags.map(tag => ({ name: tag })),
-    badges: [],
-    verification: { authorized_category: 'langgenius' },
-    from: 'package',
+    tags: [],
   }
 }
 
 export const pluginManifestInMarketToPluginProps = (pluginManifest: PluginManifestInMarket): Plugin => {
   return {
     plugin_id: pluginManifest.plugin_unique_identifier,
-    type: pluginManifest.category as Plugin['type'],
+    type: pluginManifest.category,
     category: pluginManifest.category,
     name: pluginManifest.name,
     version: pluginManifest.latest_version,
@@ -43,7 +38,6 @@ export const pluginManifestInMarketToPluginProps = (pluginManifest: PluginManife
     org: pluginManifest.org,
     label: pluginManifest.label,
     brief: pluginManifest.brief,
-    description: pluginManifest.brief,
     icon: pluginManifest.icon,
     verified: true,
     introduction: pluginManifest.introduction,
@@ -55,7 +49,6 @@ export const pluginManifestInMarketToPluginProps = (pluginManifest: PluginManife
     tags: [],
     badges: pluginManifest.badges,
     verification: isEmpty(pluginManifest.verification) ? { authorized_category: 'langgenius' } : pluginManifest.verification,
-    from: pluginManifest.from,
   }
 }
 

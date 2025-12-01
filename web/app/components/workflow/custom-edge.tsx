@@ -83,11 +83,11 @@ const CustomEdge = ({
     setOpen(v)
   }, [])
 
-  const handleInsert = useCallback<OnSelectBlock>((nodeType, pluginDefaultValue) => {
+  const handleInsert = useCallback<OnSelectBlock>((nodeType, toolDefaultValue) => {
     handleNodeAdd(
       {
         nodeType,
-        pluginDefaultValue,
+        toolDefaultValue,
       },
       {
         prevNodeId: source,

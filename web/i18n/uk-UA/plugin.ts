@@ -7,7 +7,6 @@ const translation = {
     extensions: 'Розширення',
     agents: 'Стратегії агентів',
     datasources: 'Джерела даних',
-    triggers: 'Тригери',
   },
   categorySingle: {
     agent: 'Стратегія агента',
@@ -16,7 +15,6 @@ const translation = {
     extension: 'Збільшення',
     model: 'Модель',
     datasource: 'Джерело даних',
-    trigger: 'Спусковий механізм',
   },
   list: {
     source: {
@@ -47,7 +45,6 @@ const translation = {
       checkUpdate: 'Перевірити Оновлення',
       update: 'Оновлювати',
       info: 'Інформація про плагін',
-      back: 'Назад',
     },
     toolSelector: {
       placeholder: 'Виберіть інструмент...',
@@ -308,12 +305,6 @@ const translation = {
     updateSettings: 'Оновити налаштування',
     changeTimezone: 'Щоб змінити часовий пояс, перейдіть до <setTimezone>Налаштування</setTimezone>',
     partialUPdate: 'Тільки наступні {{num}} плагіни будуть автоматично оновлюватися',
-  },
-  readmeInfo: {
-    title: 'Прочитай мене',
-    needHelpCheckReadme: 'Потрібна допомога? Перегляньте README.',
-    noReadmeAvailable: 'README недоступний',
-    failedToFetch: 'Не вдалося отримати README',
   },
 }
 

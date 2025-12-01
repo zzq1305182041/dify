@@ -10,7 +10,6 @@ const translation = {
     agents: 'Strategije agenta',
     tools: 'Orodja',
     datasources: 'Viri podatkov',
-    triggers: 'Sprožilci',
   },
   categorySingle: {
     extension: 'Razširitev',
@@ -19,7 +18,6 @@ const translation = {
     tool: 'Orodje',
     model: 'Model',
     datasource: 'Vir podatkov',
-    trigger: 'Sprožilec',
   },
   list: {
     source: {
@@ -50,7 +48,6 @@ const translation = {
       update: 'Posodobitev',
       checkUpdate: 'Preveri posodobitev',
       info: 'Informacije o vtičniku',
-      back: 'Nazaj',
     },
     toolSelector: {
       unsupportedContent: 'V različici vtičnika, ki je nameščena, ta akcija ni zagotovljena.',
@@ -308,12 +305,6 @@ const translation = {
     changeTimezone: 'Za spremembo časovnega pasu pojdite v <setTimezone>Nastavitve</setTimezone>',
     partialUPdate: 'Samo naslednjih {{num}} vtičnikov se bo samodejno posodabljalo.',
     updateSettings: 'Posodobi nastavitve',
-  },
-  readmeInfo: {
-    title: 'PREBERIME',
-    needHelpCheckReadme: 'Potrebujete pomoč? Preverite README.',
-    noReadmeAvailable: 'README ni na voljo',
-    failedToFetch: 'Neuspešno pridobivanje datoteke README',
   },
 }
 

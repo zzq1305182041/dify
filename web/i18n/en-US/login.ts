@@ -1,6 +1,5 @@
 const translation = {
   pageTitle: 'Log in to Dify',
-  pageTitleForE: 'Hey, let\'s get started!',
   welcome: '👋 Welcome! Please log in to get started.',
   email: 'Email address',
   emailPlaceholder: 'Your email',

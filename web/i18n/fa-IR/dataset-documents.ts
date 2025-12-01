@@ -81,10 +81,6 @@ const translation = {
       ok: 'تأیید',
     },
     learnMore: 'بیشتر بدانید',
-    sort: {
-      uploadTime: 'زمان بارگذاری',
-      hitCount: 'تعداد بازیابی',
-    },
   },
   metadata: {
     title: 'اطلاعات متا',

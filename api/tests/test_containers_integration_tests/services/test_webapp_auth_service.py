@@ -35,7 +35,9 @@ class TestWebAppAuthService:
             mock_enterprise_service.WebAppAuth.get_app_access_mode_by_id.return_value = type(
                 "MockWebAppAuth", (), {"access_mode": "private"}
             )()
-            # Note: get_app_access_mode_by_code method was removed in refactoring
+            mock_enterprise_service.WebAppAuth.get_app_access_mode_by_code.return_value = type(
+                "MockWebAppAuth", (), {"access_mode": "private"}
+            )()
 
             yield {
                 "passport_service": mock_passport_service,

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, NewType, Union
 
-from core.app.entities.app_invoke_entities import AdvancedChatAppGenerateEntity, InvokeFrom, WorkflowAppGenerateEntity
+from core.app.entities.app_invoke_entities import AdvancedChatAppGenerateEntity, WorkflowAppGenerateEntity
 from core.app.entities.queue_entities import (
     QueueAgentLogEvent,
     QueueIterationCompletedEvent,
@@ -37,7 +37,6 @@ from core.file import FILE_MODEL_IDENTITY, File
 from core.plugin.impl.datasource import PluginDatasourceManager
 from core.tools.entities.tool_entities import ToolProviderType
 from core.tools.tool_manager import ToolManager
-from core.trigger.trigger_manager import TriggerManager
 from core.variables.segments import ArrayFileSegment, FileSegment, Segment
 from core.workflow.enums import (
     NodeType,
@@ -52,7 +51,7 @@ from core.workflow.workflow_entry import WorkflowEntry
 from core.workflow.workflow_type_encoder import WorkflowRuntimeTypeConverter
 from libs.datetime_utils import naive_utc_now
 from models import Account, EndUser
-from services.variable_truncator import BaseTruncator, DummyVariableTruncator, VariableTruncator
+from services.variable_truncator import VariableTruncator
 
 NodeExecutionId = NewType("NodeExecutionId", str)
 
@@ -71,8 +70,6 @@ class _NodeSnapshot:
 
 
 class WorkflowResponseConverter:
-    _truncator: BaseTruncator
-
     def __init__(
         self,
         *,
@@ -84,13 +81,7 @@ class WorkflowResponseConverter:
         self._user = user
         self._system_variables = system_variables
         self._workflow_inputs = self._prepare_workflow_inputs()
-
-        # Disable truncation for SERVICE_API calls to keep backward compatibility.
-        if application_generate_entity.invoke_from == InvokeFrom.SERVICE_API:
-            self._truncator = DummyVariableTruncator()
-        else:
-            self._truncator = VariableTruncator.default()
-
+        self._truncator = VariableTruncator.default()
         self._node_snapshots: dict[NodeExecutionId, _NodeSnapshot] = {}
         self._workflow_execution_id: str | None = None
         self._workflow_started_at: datetime | None = None
@@ -303,11 +294,6 @@ class WorkflowResponseConverter:
             )
             response.data.extras["icon"] = provider_entity.declaration.identity.generate_datasource_icon_url(
                 self._application_generate_entity.app_config.tenant_id
-            )
-        elif event.node_type == NodeType.TRIGGER_PLUGIN:
-            response.data.extras["icon"] = TriggerManager.get_trigger_plugin_icon(
-                self._application_generate_entity.app_config.tenant_id,
-                event.provider_id,
             )
 
         return response

@@ -24,7 +24,6 @@ from core.workflow.graph_events import (
     NodeRunLoopStartedEvent,
     NodeRunLoopSucceededEvent,
     NodeRunPauseRequestedEvent,
-    NodeRunRetrieverResourceEvent,
     NodeRunRetryEvent,
     NodeRunStartedEvent,
     NodeRunStreamChunkEvent,
@@ -113,7 +112,6 @@ class EventHandler:
     @_dispatch.register(NodeRunLoopSucceededEvent)
     @_dispatch.register(NodeRunLoopFailedEvent)
     @_dispatch.register(NodeRunAgentLogEvent)
-    @_dispatch.register(NodeRunRetrieverResourceEvent)
     def _(self, event: GraphNodeEventBase) -> None:
         self._event_collector.collect(event)
 
@@ -210,7 +208,7 @@ class EventHandler:
     def _(self, event: NodeRunPauseRequestedEvent) -> None:
         """Handle pause requests emitted by nodes."""
 
-        pause_reason = event.reason
+        pause_reason = event.reason or "Awaiting human input"
         self._graph_execution.pause(pause_reason)
         self._state_manager.finish_execution(event.node_id)
         if event.node_id in self._graph.nodes:

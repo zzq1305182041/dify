@@ -69,6 +69,10 @@ def init_code_node(code_config: dict):
         graph_runtime_state=graph_runtime_state,
     )
 
+    # Initialize node data
+    if "data" in code_config:
+        node.init_node_data(code_config["data"])
+
     return node
 
 

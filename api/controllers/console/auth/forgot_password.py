@@ -6,7 +6,7 @@ from flask_restx import Resource, fields, reqparse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from controllers.console import console_ns
+from controllers.console import api, console_ns
 from controllers.console.auth.error import (
     EmailCodeError,
     EmailPasswordResetLimitError,
@@ -27,10 +27,10 @@ from services.feature_service import FeatureService
 
 @console_ns.route("/forgot-password")
 class ForgotPasswordSendEmailApi(Resource):
-    @console_ns.doc("send_forgot_password_email")
-    @console_ns.doc(description="Send password reset email")
-    @console_ns.expect(
-        console_ns.model(
+    @api.doc("send_forgot_password_email")
+    @api.doc(description="Send password reset email")
+    @api.expect(
+        api.model(
             "ForgotPasswordEmailRequest",
             {
                 "email": fields.String(required=True, description="Email address"),
@@ -38,10 +38,10 @@ class ForgotPasswordSendEmailApi(Resource):
             },
         )
     )
-    @console_ns.response(
+    @api.response(
         200,
         "Email sent successfully",
-        console_ns.model(
+        api.model(
             "ForgotPasswordEmailResponse",
             {
                 "result": fields.String(description="Operation result"),
@@ -50,7 +50,7 @@ class ForgotPasswordSendEmailApi(Resource):
             },
         ),
     )
-    @console_ns.response(400, "Invalid email or rate limit exceeded")
+    @api.response(400, "Invalid email or rate limit exceeded")
     @setup_required
     @email_password_login_enabled
     def post(self):
@@ -85,10 +85,10 @@ class ForgotPasswordSendEmailApi(Resource):
 
 @console_ns.route("/forgot-password/validity")
 class ForgotPasswordCheckApi(Resource):
-    @console_ns.doc("check_forgot_password_code")
-    @console_ns.doc(description="Verify password reset code")
-    @console_ns.expect(
-        console_ns.model(
+    @api.doc("check_forgot_password_code")
+    @api.doc(description="Verify password reset code")
+    @api.expect(
+        api.model(
             "ForgotPasswordCheckRequest",
             {
                 "email": fields.String(required=True, description="Email address"),
@@ -97,10 +97,10 @@ class ForgotPasswordCheckApi(Resource):
             },
         )
     )
-    @console_ns.response(
+    @api.response(
         200,
         "Code verified successfully",
-        console_ns.model(
+        api.model(
             "ForgotPasswordCheckResponse",
             {
                 "is_valid": fields.Boolean(description="Whether code is valid"),
@@ -109,7 +109,7 @@ class ForgotPasswordCheckApi(Resource):
             },
         ),
     )
-    @console_ns.response(400, "Invalid code or token")
+    @api.response(400, "Invalid code or token")
     @setup_required
     @email_password_login_enabled
     def post(self):
@@ -152,10 +152,10 @@ class ForgotPasswordCheckApi(Resource):
 
 @console_ns.route("/forgot-password/resets")
 class ForgotPasswordResetApi(Resource):
-    @console_ns.doc("reset_password")
-    @console_ns.doc(description="Reset password with verification token")
-    @console_ns.expect(
-        console_ns.model(
+    @api.doc("reset_password")
+    @api.doc(description="Reset password with verification token")
+    @api.expect(
+        api.model(
             "ForgotPasswordResetRequest",
             {
                 "token": fields.String(required=True, description="Verification token"),
@@ -164,12 +164,12 @@ class ForgotPasswordResetApi(Resource):
             },
         )
     )
-    @console_ns.response(
+    @api.response(
         200,
         "Password reset successfully",
-        console_ns.model("ForgotPasswordResetResponse", {"result": fields.String(description="Operation result")}),
+        api.model("ForgotPasswordResetResponse", {"result": fields.String(description="Operation result")}),
     )
-    @console_ns.response(400, "Invalid token or password mismatch")
+    @api.response(400, "Invalid token or password mismatch")
     @setup_required
     @email_password_login_enabled
     def post(self):

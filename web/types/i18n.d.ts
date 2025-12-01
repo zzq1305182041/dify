@@ -27,7 +27,6 @@ type LoginMessages = typeof import('../i18n/en-US/login').default
 type OauthMessages = typeof import('../i18n/en-US/oauth').default
 type PipelineMessages = typeof import('../i18n/en-US/pipeline').default
 type PluginTagsMessages = typeof import('../i18n/en-US/plugin-tags').default
-type PluginTriggerMessages = typeof import('../i18n/en-US/plugin-trigger').default
 type PluginMessages = typeof import('../i18n/en-US/plugin').default
 type RegisterMessages = typeof import('../i18n/en-US/register').default
 type RunLogMessages = typeof import('../i18n/en-US/run-log').default
@@ -60,7 +59,6 @@ export type Messages = {
   oauth: OauthMessages;
   pipeline: PipelineMessages;
   pluginTags: PluginTagsMessages;
-  pluginTrigger: PluginTriggerMessages;
   plugin: PluginMessages;
   register: RegisterMessages;
   runLog: RunLogMessages;

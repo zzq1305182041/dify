@@ -1,13 +1,14 @@
 import json
 from datetime import datetime
-from uuid import uuid4
 
 import sqlalchemy as sa
 from sqlalchemy import DateTime, String, func
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
-from .base import TypeBase
-from .types import AdjustedJSON, LongText, StringUUID, adjusted_json_index
+from models.base import TypeBase
+
+from .types import StringUUID
 
 
 class DataSourceOauthBinding(TypeBase):
@@ -15,16 +16,14 @@ class DataSourceOauthBinding(TypeBase):
     __table_args__ = (
         sa.PrimaryKeyConstraint("id", name="source_binding_pkey"),
         sa.Index("source_binding_tenant_id_idx", "tenant_id"),
-        adjusted_json_index("source_info_idx", "source_info"),
+        sa.Index("source_info_idx", "source_info", postgresql_using="gin"),
     )
 
-    id: Mapped[str] = mapped_column(
-        StringUUID, insert_default=lambda: str(uuid4()), default_factory=lambda: str(uuid4()), init=False
-    )
+    id: Mapped[str] = mapped_column(StringUUID, server_default=sa.text("uuid_generate_v4()"), init=False)
     tenant_id: Mapped[str] = mapped_column(StringUUID, nullable=False)
     access_token: Mapped[str] = mapped_column(String(255), nullable=False)
     provider: Mapped[str] = mapped_column(String(255), nullable=False)
-    source_info: Mapped[dict] = mapped_column(AdjustedJSON, nullable=False)
+    source_info: Mapped[dict] = mapped_column(JSONB, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.current_timestamp(), init=False
     )
@@ -46,13 +45,11 @@ class DataSourceApiKeyAuthBinding(TypeBase):
         sa.Index("data_source_api_key_auth_binding_provider_idx", "provider"),
     )
 
-    id: Mapped[str] = mapped_column(
-        StringUUID, insert_default=lambda: str(uuid4()), default_factory=lambda: str(uuid4()), init=False
-    )
+    id: Mapped[str] = mapped_column(StringUUID, server_default=sa.text("uuid_generate_v4()"), init=False)
     tenant_id: Mapped[str] = mapped_column(StringUUID, nullable=False)
     category: Mapped[str] = mapped_column(String(255), nullable=False)
     provider: Mapped[str] = mapped_column(String(255), nullable=False)
-    credentials: Mapped[str | None] = mapped_column(LongText, nullable=True, default=None)  # JSON
+    credentials: Mapped[str | None] = mapped_column(sa.Text, nullable=True, default=None)  # JSON
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.current_timestamp(), init=False
     )

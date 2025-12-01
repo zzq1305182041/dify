@@ -75,6 +75,7 @@ const translation = {
   intro5: 'se lahko ustvari',
   intro6: ' kot samostojni vtičnik ChatGPT za objavo',
   unavailable: 'Ni na voljo',
+  unavailableTip: 'Vdelani model ni na voljo, potrebno je konfigurirati privzeti vdelani model',
   datasets: 'ZNANJE',
   datasetsApi: 'API DOSTOP',
   externalKnowledgeForm: {
@@ -108,6 +109,8 @@ const translation = {
       recommend: 'Priporočamo',
     },
     invertedIndex: {
+      title: 'Inverzni indeks',
+      description: 'Inverzni indeks je struktura, ki se uporablja za učinkovito pridobivanje. Organizirano po izrazih, vsak izraz kaže na dokumente ali spletne strani, ki ga vsebujejo.',
     },
     change: 'Spremeni',
     changeRetrievalMethod: 'Spremeni metodo pridobivanja',
@@ -234,10 +237,6 @@ const translation = {
     disabled: 'Onemogočeno',
     enabled: 'V storitvi',
   },
-  docAllEnabled_one: '{{count}} dokument omogočen',
-  docAllEnabled_other: 'Vsi dokumenti {{count}} omogočeni',
-  partialEnabled_one: 'Skupno {{count}} dokumentov, na voljo {{num}}',
-  partialEnabled_other: 'Skupno {{count}} dokumentov, na voljo {{num}}',
 }
 
 export default translation

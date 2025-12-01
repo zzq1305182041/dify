@@ -19,7 +19,6 @@ type SearchBoxProps = {
   usedInMarketplace?: boolean
   onShowAddCustomCollectionModal?: () => void
   onAddedCustomTool?: () => void
-  autoFocus?: boolean
 }
 const SearchBox = ({
   search,
@@ -33,7 +32,6 @@ const SearchBox = ({
   usedInMarketplace = false,
   supportAddCustomTool,
   onShowAddCustomCollectionModal,
-  autoFocus = false,
 }: SearchBoxProps) => {
   return (
     <div
@@ -42,7 +40,7 @@ const SearchBox = ({
       <div className={
         cn('flex items-center',
           usedInMarketplace && 'rounded-xl border border-components-chat-input-border bg-components-panel-bg-blur p-1.5 shadow-md',
-          !usedInMarketplace && 'radius-md border border-transparent bg-components-input-bg-normal focus-within:border-components-input-border-active hover:border-components-input-border-hover',
+          !usedInMarketplace && 'rounded-lg bg-components-input-bg-normal p-0.5',
           inputClassName,
         )
       }>
@@ -84,12 +82,11 @@ const SearchBox = ({
         {
           !usedInMarketplace && (
             <>
-              <div className='flex grow items-center py-[7px] pl-2 pr-3'>
+              <div className='flex grow items-center p-2'>
                 <RiSearchLine className='size-4 text-components-input-text-placeholder' />
                 <input
-                  autoFocus={autoFocus}
                   className={cn(
-                    'system-sm-regular ml-1.5 mr-1 inline-block grow appearance-none bg-transparent text-components-input-text-filled outline-none placeholder:text-components-input-text-placeholder',
+                    'body-md-medium ml-1.5 mr-1 inline-block grow appearance-none bg-transparent text-text-secondary outline-none',
                     search && 'mr-2',
                   )}
                   value={search}

@@ -81,10 +81,6 @@ const translation = {
     },
     addUrl: 'URL hinzufügen',
     learnMore: 'Weitere Informationen',
-    sort: {
-      uploadTime: 'Upload-Zeit',
-      hitCount: 'Abrufanzahl',
-    },
   },
   metadata: {
     title: 'Metadaten',

@@ -38,7 +38,6 @@ const NAMESPACES = [
   'oauth',
   'pipeline',
   'plugin-tags',
-  'plugin-trigger',
   'plugin',
   'register',
   'run-log',

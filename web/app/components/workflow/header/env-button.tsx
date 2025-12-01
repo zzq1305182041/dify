@@ -9,16 +9,13 @@ import { useInputFieldPanel } from '@/app/components/rag-pipeline/hooks'
 const EnvButton = ({ disabled }: { disabled: boolean }) => {
   const { theme } = useTheme()
   const setShowChatVariablePanel = useStore(s => s.setShowChatVariablePanel)
-  const showEnvPanel = useStore(s => s.showEnvPanel)
   const setShowEnvPanel = useStore(s => s.setShowEnvPanel)
-  const setShowGlobalVariablePanel = useStore(s => s.setShowGlobalVariablePanel)
   const setShowDebugAndPreviewPanel = useStore(s => s.setShowDebugAndPreviewPanel)
   const { closeAllInputFieldPanels } = useInputFieldPanel()
 
   const handleClick = () => {
     setShowEnvPanel(true)
     setShowChatVariablePanel(false)
-    setShowGlobalVariablePanel(false)
     setShowDebugAndPreviewPanel(false)
     closeAllInputFieldPanels()
   }
@@ -27,9 +24,8 @@ const EnvButton = ({ disabled }: { disabled: boolean }) => {
     <Button
       className={cn(
         'p-2',
-        theme === 'dark' && showEnvPanel && 'rounded-lg border border-black/5 bg-white/10 backdrop-blur-sm',
+        theme === 'dark' && 'rounded-lg border border-black/5 bg-white/10 backdrop-blur-sm',
       )}
-      variant='ghost'
       disabled={disabled}
       onClick={handleClick}
     >

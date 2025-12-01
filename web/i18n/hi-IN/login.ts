@@ -125,7 +125,6 @@ const translation = {
     welcome: '👋 स्वागत है! कृपया शुरू करने के लिए विवरण भरें।',
     haveAccount: 'क्या आपका पहले से एक खाता है?',
   },
-  pageTitleForE: 'अरे, चलो शुरू करें!',
 }
 
 export default translation

@@ -6,7 +6,8 @@ from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Any, cast
 
-from sqlalchemy import and_, func, literal, or_, select
+from sqlalchemy import Float, and_, func, or_, select, text
+from sqlalchemy import cast as sqlalchemy_cast
 from sqlalchemy.orm import sessionmaker
 
 from core.app.app_config.entities import DatasetRetrieveConfigEntity
@@ -30,12 +31,14 @@ from core.variables import (
 from core.variables.segments import ArrayObjectSegment
 from core.workflow.entities import GraphInitParams
 from core.workflow.enums import (
+    ErrorStrategy,
     NodeType,
     WorkflowNodeExecutionMetadataKey,
     WorkflowNodeExecutionStatus,
 )
 from core.workflow.node_events import ModelInvokeCompletedEvent, NodeRunResult
 from core.workflow.nodes.base import LLMUsageTrackingMixin
+from core.workflow.nodes.base.entities import BaseNodeData, RetryConfig
 from core.workflow.nodes.base.node import Node
 from core.workflow.nodes.knowledge_retrieval.template_prompts import (
     METADATA_FILTER_ASSISTANT_PROMPT_1,
@@ -80,8 +83,10 @@ default_retrieval_model = {
 }
 
 
-class KnowledgeRetrievalNode(LLMUsageTrackingMixin, Node[KnowledgeRetrievalNodeData]):
+class KnowledgeRetrievalNode(LLMUsageTrackingMixin, Node):
     node_type = NodeType.KNOWLEDGE_RETRIEVAL
+
+    _node_data: KnowledgeRetrievalNodeData
 
     # Instance attributes specific to LLMNode.
     # Output variable for file
@@ -114,13 +119,34 @@ class KnowledgeRetrievalNode(LLMUsageTrackingMixin, Node[KnowledgeRetrievalNodeD
             )
         self._llm_file_saver = llm_file_saver
 
+    def init_node_data(self, data: Mapping[str, Any]):
+        self._node_data = KnowledgeRetrievalNodeData.model_validate(data)
+
+    def _get_error_strategy(self) -> ErrorStrategy | None:
+        return self._node_data.error_strategy
+
+    def _get_retry_config(self) -> RetryConfig:
+        return self._node_data.retry_config
+
+    def _get_title(self) -> str:
+        return self._node_data.title
+
+    def _get_description(self) -> str | None:
+        return self._node_data.desc
+
+    def _get_default_value_dict(self) -> dict[str, Any]:
+        return self._node_data.default_value_dict
+
+    def get_base_node_data(self) -> BaseNodeData:
+        return self._node_data
+
     @classmethod
     def version(cls):
         return "1"
 
     def _run(self) -> NodeRunResult:
         # extract variables
-        variable = self.graph_runtime_state.variable_pool.get(self.node_data.query_variable_selector)
+        variable = self.graph_runtime_state.variable_pool.get(self._node_data.query_variable_selector)
         if not isinstance(variable, StringSegment):
             return NodeRunResult(
                 status=WorkflowNodeExecutionStatus.FAILED,
@@ -161,7 +187,7 @@ class KnowledgeRetrievalNode(LLMUsageTrackingMixin, Node[KnowledgeRetrievalNodeD
         # retrieve knowledge
         usage = LLMUsage.empty_usage()
         try:
-            results, usage = self._fetch_dataset_retriever(node_data=self.node_data, query=query)
+            results, usage = self._fetch_dataset_retriever(node_data=self._node_data, query=query)
             outputs = {"result": ArrayObjectSegment(value=results)}
             return NodeRunResult(
                 status=WorkflowNodeExecutionStatus.SUCCEEDED,
@@ -534,7 +560,7 @@ class KnowledgeRetrievalNode(LLMUsageTrackingMixin, Node[KnowledgeRetrievalNodeD
                 prompt_messages=prompt_messages,
                 stop=stop,
                 user_id=self.user_id,
-                structured_output_enabled=self.node_data.structured_output_enabled,
+                structured_output_enabled=self._node_data.structured_output_enabled,
                 structured_output=None,
                 file_saver=self._llm_file_saver,
                 file_outputs=self._file_outputs,
@@ -571,79 +597,79 @@ class KnowledgeRetrievalNode(LLMUsageTrackingMixin, Node[KnowledgeRetrievalNodeD
         if value is None and condition not in ("empty", "not empty"):
             return filters
 
-        json_field = Document.doc_metadata[metadata_name].as_string()
-
+        key = f"{metadata_name}_{sequence}"
+        key_value = f"{metadata_name}_{sequence}_value"
         match condition:
             case "contains":
-                filters.append(json_field.like(f"%{value}%"))
-
+                filters.append(
+                    (text(f"documents.doc_metadata ->> :{key} LIKE :{key_value}")).params(
+                        **{key: metadata_name, key_value: f"%{value}%"}
+                    )
+                )
             case "not contains":
-                filters.append(json_field.notlike(f"%{value}%"))
-
+                filters.append(
+                    (text(f"documents.doc_metadata ->> :{key} NOT LIKE :{key_value}")).params(
+                        **{key: metadata_name, key_value: f"%{value}%"}
+                    )
+                )
             case "start with":
-                filters.append(json_field.like(f"{value}%"))
-
+                filters.append(
+                    (text(f"documents.doc_metadata ->> :{key} LIKE :{key_value}")).params(
+                        **{key: metadata_name, key_value: f"{value}%"}
+                    )
+                )
             case "end with":
-                filters.append(json_field.like(f"%{value}"))
+                filters.append(
+                    (text(f"documents.doc_metadata ->> :{key} LIKE :{key_value}")).params(
+                        **{key: metadata_name, key_value: f"%{value}"}
+                    )
+                )
             case "in":
                 if isinstance(value, str):
-                    value_list = [v.strip() for v in value.split(",") if v.strip()]
-                elif isinstance(value, (list, tuple)):
-                    value_list = [str(v) for v in value if v is not None]
+                    escaped_values = [v.strip().replace("'", "''") for v in str(value).split(",")]
+                    escaped_value_str = ",".join(escaped_values)
                 else:
-                    value_list = [str(value)] if value is not None else []
-
-                if not value_list:
-                    filters.append(literal(False))
-                else:
-                    filters.append(json_field.in_(value_list))
-
+                    escaped_value_str = str(value)
+                filters.append(
+                    (text(f"documents.doc_metadata ->> :{key} = any(string_to_array(:{key_value},','))")).params(
+                        **{key: metadata_name, key_value: escaped_value_str}
+                    )
+                )
             case "not in":
                 if isinstance(value, str):
-                    value_list = [v.strip() for v in value.split(",") if v.strip()]
-                elif isinstance(value, (list, tuple)):
-                    value_list = [str(v) for v in value if v is not None]
+                    escaped_values = [v.strip().replace("'", "''") for v in str(value).split(",")]
+                    escaped_value_str = ",".join(escaped_values)
                 else:
-                    value_list = [str(value)] if value is not None else []
-
-                if not value_list:
-                    filters.append(literal(True))
-                else:
-                    filters.append(json_field.notin_(value_list))
-
-            case "is" | "=":
+                    escaped_value_str = str(value)
+                filters.append(
+                    (text(f"documents.doc_metadata ->> :{key} != all(string_to_array(:{key_value},','))")).params(
+                        **{key: metadata_name, key_value: escaped_value_str}
+                    )
+                )
+            case "=" | "is":
                 if isinstance(value, str):
-                    filters.append(json_field == value)
-                elif isinstance(value, (int, float)):
-                    filters.append(Document.doc_metadata[metadata_name].as_float() == value)
-
+                    filters.append(Document.doc_metadata[metadata_name] == f'"{value}"')
+                else:
+                    filters.append(sqlalchemy_cast(Document.doc_metadata[metadata_name].astext, Float) == value)
             case "is not" | "≠":
                 if isinstance(value, str):
-                    filters.append(json_field != value)
-                elif isinstance(value, (int, float)):
-                    filters.append(Document.doc_metadata[metadata_name].as_float() != value)
-
+                    filters.append(Document.doc_metadata[metadata_name] != f'"{value}"')
+                else:
+                    filters.append(sqlalchemy_cast(Document.doc_metadata[metadata_name].astext, Float) != value)
             case "empty":
                 filters.append(Document.doc_metadata[metadata_name].is_(None))
-
             case "not empty":
                 filters.append(Document.doc_metadata[metadata_name].isnot(None))
-
             case "before" | "<":
-                filters.append(Document.doc_metadata[metadata_name].as_float() < value)
-
+                filters.append(sqlalchemy_cast(Document.doc_metadata[metadata_name].astext, Float) < value)
             case "after" | ">":
-                filters.append(Document.doc_metadata[metadata_name].as_float() > value)
-
+                filters.append(sqlalchemy_cast(Document.doc_metadata[metadata_name].astext, Float) > value)
             case "≤" | "<=":
-                filters.append(Document.doc_metadata[metadata_name].as_float() <= value)
-
+                filters.append(sqlalchemy_cast(Document.doc_metadata[metadata_name].astext, Float) <= value)
             case "≥" | ">=":
-                filters.append(Document.doc_metadata[metadata_name].as_float() >= value)
-
+                filters.append(sqlalchemy_cast(Document.doc_metadata[metadata_name].astext, Float) >= value)
             case _:
                 pass
-
         return filters
 
     @classmethod
